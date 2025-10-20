@@ -1,187 +1,511 @@
-    // app.js - script movido do index.html
-    document.addEventListener('DOMContentLoaded', () => {
-        // Dados de exemplo (simula histórico de chamados)
-        const conversationsData = [
-            { id: 'c1', name: 'João Silva', email: 'joao@example.com', unread: 2,
-                messages: [
-                    {from:'agent', text:'Olá João, como posso ajudar hoje?', time:'2025-10-18 09:10'},
-                    {from:'user', text:'Estou com erro no pagamento, a cobrança foi duplicada.', time:'2025-10-18 09:12'},
-                    {from:'agent', text:'Posso verificar a transação. Qual o último dígito do cartão?', time:'2025-10-18 09:15'},
-                    {from:'user', text:'Não desejo passar o cartão, quero estornar o valor que foi cobrado duas vezes.', time:'2025-10-18 09:17'},
-                ]
-            },
-            { id: 'c2', name: 'Maria Gomes', email: 'maria@example.com', unread: 0,
-                messages: [
-                    {from:'user', text:'Não consigo acessar minha conta desde ontem.', time:'2025-10-17 18:05'},
-                    {from:'agent', text:'Tentou resetar a senha?', time:'2025-10-17 18:07'},
-                    {from:'user', text:'Sim, mas o link não chega no e-mail.', time:'2025-10-17 18:09'},
-                ]
-            },
-            { id: 'c3', name: 'Sergio Pereira', email: 'sergio@example.com', unread: 1,
-                messages: [
-                    {from:'user', text:'Entrega atrasada do pedido #9876, preciso hoje.', time:'2025-10-16 12:00'},
-                    {from:'agent', text:'Vou verificar com o parceiro logístico.', time:'2025-10-16 12:03'},
-                ]
-            }
-        ];
+      // Variable to track selected channel for sending messages
+        let selectedChannel = 'whatsapp';
+        let currentClient = 'maria-silva';
+        
+        const channelConfig = {
+            whatsapp: { name: 'WhatsApp', icon: 'fab fa-whatsapp', class: 'whatsapp' },
+            email: { name: 'E-mail', icon: 'fas fa-envelope', class: 'email' },
+            webchat: { name: 'Chat Web', icon: 'fas fa-comments', class: 'webchat' },
+            instagram: { name: 'Instagram', icon: 'fab fa-instagram', class: 'instagram' }
+        };
 
-        // Render conversation list
-        const convListEl = document.getElementById('conversations');
-        function renderConversations(filter=''){
-            convListEl.innerHTML = '';
-            const f = filter.trim().toLowerCase();
-            conversationsData.filter(c => {
-                return (!f) || c.name.toLowerCase().includes(f) || (c.messages.some(m => m.text.toLowerCase().includes(f)));
-            }).forEach(c => {
-                const div = document.createElement('div');
-                div.className = 'conv';
-                div.dataset.id = c.id;
-                div.innerHTML = `
-                    <div class="avatar">${c.name.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
-                    <div class="meta">
-                        <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div class="name">${c.name}</div>
-                            <div class="small">${c.messages[c.messages.length-1].time.split(' ')[0]}</div>
+        // Client data structure
+        const clientsData = {
+            'maria-silva': {
+                name: 'Maria Clara Silva',
+                avatar: 'MC',
+                avatarColor: '#2563eb',
+                email: 'maria.clara@email.com',
+                phone: '(19) 99999-8888',
+                location: 'Campinas, SP',
+                status: 'online',
+                activeChannels: ['whatsapp', 'email', 'webchat'],
+                messages: [
+                    // Histórico expandido já existente no HTML
+                ],
+                notes: 'Cliente interessado em compra recorrente.\nPrefere contato via WhatsApp.\nEmpresa: Silva & Associados\nDecisor: Própria cliente',
+                kpis: { messages: 12, channels: 4, avgTime: '1m 30s', satisfaction: '98%', attendants: 3, transfers: 0 }
+            },
+            'joao-pereira': {
+                name: 'João Pereira',
+                avatar: 'JP',
+                avatarColor: '#16a34a',
+                email: 'joao.pereira@empresa.com.br',
+                phone: '(11) 98888-7777',
+                location: 'São Paulo, SP',
+                status: 'away',
+                activeChannels: ['email', 'webchat'],
+                messages: [],
+                notes: 'Gestor de compras da empresa ABC Ltda.\nPrefere comunicação formal por e-mail.\nDecisão compartilhada com diretoria.',
+                kpis: { messages: 8, channels: 2, avgTime: '3m 15s', satisfaction: '95%', attendants: 2, transfers: 1 }
+            },
+            'ana-costa': {
+                name: 'Ana Costa',
+                avatar: 'AC',
+                avatarColor: '#dc2626',
+                email: 'ana.costa@gmail.com',
+                phone: '(21) 97777-6666',
+                location: 'Rio de Janeiro, RJ',
+                status: 'online',
+                activeChannels: ['webchat', 'whatsapp'],
+                messages: [],
+                notes: 'Cliente fidelizada há 2 anos.\nSempre muito educada e satisfeita.\nCompra mensalmente.',
+                kpis: { messages: 5, channels: 2, avgTime: '45s', satisfaction: '100%', attendants: 1, transfers: 0 }
+            },
+            'pedro-lima': {
+                name: 'Pedro Lima',
+                avatar: 'PL',
+                avatarColor: '#ea580c',
+                email: 'pedro@startup.tech',
+                phone: '(85) 96666-5555',
+                location: 'Fortaleza, CE',
+                status: 'offline',
+                activeChannels: ['instagram', 'whatsapp'],
+                messages: [],
+                notes: 'Jovem empreendedor, muito ativo no Instagram.\nPrefere linguagem mais descontraída.\nBusca soluções inovadoras.',
+                kpis: { messages: 15, channels: 3, avgTime: '2m 45s', satisfaction: '92%', attendants: 2, transfers: 0 }
+            },
+            'carla-mendes': {
+                name: 'Carla Mendes',
+                avatar: 'CM',
+                avatarColor: '#7c3aed',
+                email: 'carla.mendes@consultoria.com',
+                phone: '(47) 95555-4444',
+                location: 'Florianópolis, SC',
+                status: 'online',
+                activeChannels: ['email', 'whatsapp'],
+                messages: [],
+                notes: 'Consultora experiente.\nMuito detalhista nas especificações.\nPrecisa de documentação completa.',
+                kpis: { messages: 22, channels: 2, avgTime: '4m 12s', satisfaction: '97%', attendants: 3, transfers: 1 }
+            }
+        };
+
+        // Toggle channel selector dropdown
+        function toggleChannelSelector() {
+            const options = document.getElementById('channelOptions');
+            options.classList.toggle('show');
+        }
+
+        // Select channel for sending messages
+        function selectChannel(channel) {
+            selectedChannel = channel;
+            const config = channelConfig[channel];
+            const dropdown = document.querySelector('.channel-dropdown');
+            
+            // Update dropdown appearance
+            dropdown.className = `channel-dropdown ${config.class}`;
+            dropdown.innerHTML = `
+                <i class="${config.icon}"></i>
+                <span>${config.name}</span>
+                <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 10px;"></i>
+            `;
+            
+            // Hide options
+            document.getElementById('channelOptions').classList.remove('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const selector = document.querySelector('.channel-selector');
+            if (!selector.contains(e.target)) {
+                document.getElementById('channelOptions').classList.remove('show');
+            }
+        });
+
+        // Client switching functionality
+        document.querySelectorAll('.conversation-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all conversations
+                document.querySelectorAll('.conversation-item').forEach(conv => conv.classList.remove('active'));
+                // Add active class to clicked conversation
+                item.classList.add('active');
+                
+                // Switch to selected client
+                const clientId = item.getAttribute('data-client');
+                switchToClient(clientId);
+            });
+        });
+
+        // Switch to client function
+        function switchToClient(clientId) {
+            currentClient = clientId;
+            const client = clientsData[clientId];
+            
+            updateChatHeader(client);
+            updateCustomerPanel(client);
+            loadClientMessages(client);
+        }
+
+        // Update chat header with client info
+        function updateChatHeader(client) {
+            const avatar = document.querySelector('.client-avatar');
+            const name = document.querySelector('.client-details h3');
+            const activeChannels = document.querySelector('.active-channels');
+            
+            avatar.textContent = client.avatar;
+            avatar.style.background = client.avatarColor;
+            name.textContent = client.name;
+            
+            // Update active channels
+            activeChannels.innerHTML = client.activeChannels.map(channel => {
+                const config = channelConfig[channel];
+                return `<span class="mini-channel-badge ${config.class}">
+                    <i class="${config.icon}"></i> ${config.name}
+                </span>`;
+            }).join('');
+        }
+
+        // Update customer panel
+        function updateCustomerPanel(client) {
+            // Update customer info
+            document.querySelector('.customer-avatar').textContent = client.avatar;
+            document.querySelector('.customer-avatar').style.background = client.avatarColor;
+            document.querySelector('.customer-name').textContent = client.name;
+            document.querySelector('.customer-details').innerHTML = `
+                <div><i class="fas fa-envelope"></i> ${client.email}</div>
+                <div><i class="fas fa-phone"></i> ${client.phone}</div>
+                <div><i class="fas fa-map-marker-alt"></i> ${client.location}</div>
+            `;
+            
+            // Update notes
+            document.querySelector('.notes-textarea').value = client.notes;
+            
+            // Update KPIs
+            const kpiCards = document.querySelectorAll('.kpi-card .kpi-value');
+            kpiCards[0].textContent = client.kpis.messages;
+            kpiCards[1].textContent = client.kpis.channels;
+            kpiCards[2].textContent = client.kpis.avgTime;
+            kpiCards[3].textContent = client.kpis.satisfaction;
+            kpiCards[4].textContent = client.kpis.attendants;
+            kpiCards[5].textContent = client.kpis.transfers;
+        }
+
+        // Load client messages (simplified for demo)
+        function loadClientMessages(client) {
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            if (client.name === 'Maria Clara Silva') {
+                // Keep existing Maria's messages
+                return;
+            }
+            
+            // Clear chat for other clients and show sample messages
+            const existingMessages = chatMessages.querySelectorAll('.message, .attendant-change, .channel-transition');
+            existingMessages.forEach(msg => {
+                if (!msg.classList.contains('load-history-btn')) {
+                    msg.remove();
+                }
+            });
+            
+            // Add sample messages for other clients
+            const sampleMessages = getSampleMessagesForClient(client);
+            sampleMessages.forEach(msgData => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = msgData.sent ? 'message sent' : 'message';
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="channel-badge ${msgData.channel}">
+                                <i class="${channelConfig[msgData.channel].icon}"></i> ${channelConfig[msgData.channel].name}
+                            </span>
+                            <span>${msgData.time}</span>
                         </div>
-                        <div class="last">${c.messages[c.messages.length-1].text}</div>
+                        ${msgData.text}
+                        <div class="message-time">${msgData.timestamp}</div>
                     </div>
-                    ${c.unread? `<div class="unread">${c.unread}</div>` : ''}
                 `;
-                div.addEventListener('click', ()=>selectConversation(c.id));
-                convListEl.appendChild(div);
+                chatMessages.appendChild(messageDiv);
             });
         }
 
-        // Conversation selection and UI binding
-        let activeConv = null;
-        function selectConversation(id){
-            activeConv = conversationsData.find(c=>c.id===id);
-            document.getElementById('activeName').textContent = activeConv.name;
-            document.getElementById('activeStatus').textContent = 'Última atividade: ' + activeConv.messages[activeConv.messages.length-1].time;
-            document.getElementById('metaClient').textContent = activeConv.email;
-            document.getElementById('metaCount').textContent = activeConv.messages.length;
-            renderMessages(activeConv.messages);
-            document.getElementById('msgInput').disabled = false;
-            document.getElementById('sendBtn').disabled = false;
-            // Generate summary automatically on select
-            document.getElementById('summary').value = generateSummary(activeConv);
-            // Mark unread as read visually
-            activeConv.unread = 0;
-            renderConversations(document.getElementById('filter').value);
-        }
-
-        function renderMessages(messages){
-            const el = document.getElementById('messages');
-            el.innerHTML = '';
-            messages.forEach(m => {
-                const d = document.createElement('div');
-                d.className = 'msg ' + (m.from === 'user' ? 'user' : 'agent');
-                d.innerHTML = `<div style="font-size:12px;color:var(--muted);margin-bottom:6px">${m.time}</div><div>${escapeHtml(m.text)}</div>`;
-                el.appendChild(d);
-            });
-            el.scrollTop = el.scrollHeight;
-        }
-
-        function escapeHtml(s){
-            return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        }
-
-        // Simple local "IA" summarizer: extracts intents, issues and actions from last N messages
-        function generateSummary(conv){
-            const recent = conv.messages.slice(-8).map(m => ({from:m.from, text:m.text.toLowerCase()}));
-            const issues = [];
-            const actions = [];
-            const keywords = {
-                pagamento: ['pagamento','cobran','estorno','cartão','duplicad','débito','cobr'],
-                acesso: ['acess','senha','login','entrar','e-mail','link'],
-                entrega: ['entreg','pedido','frete','logíst','atrasad','envio'],
-                erro: ['erro','bug','crash','não funciona','falha'],
-                cancelamento: ['cancel','estorno','devoluç','reembolso']
+        // Get sample messages for different clients
+        function getSampleMessagesForClient(client) {
+            const samples = {
+                'joao-pereira': [
+                    {sent: false, channel: 'email', time: 'hoje • 14:30', timestamp: '14:30', text: 'Bom dia! Gostaria de solicitar uma proposta para 500 unidades do produto Y.'},
+                    {sent: true, channel: 'email', time: 'hoje • 14:32', timestamp: '14:32', text: 'Bom dia João! Claro, vou preparar a proposta detalhada para você. Qual o prazo de entrega desejado?'},
+                    {sent: false, channel: 'webchat', time: 'hoje • 15:15', timestamp: '15:15', text: 'Mudei para o chat para ser mais rápido. Preciso da entrega até o fim do mês.'}
+                ],
+                'ana-costa': [
+                    {sent: false, channel: 'webchat', time: 'hoje • 13:10', timestamp: '13:10', text: 'Olá! Vim fazer meu pedido mensal. Podem me ajudar?'},
+                    {sent: true, channel: 'webchat', time: 'hoje • 13:11', timestamp: '13:11', text: 'Oi Ana! Claro, sempre um prazer atendê-la. O pedido usual de sempre?'},
+                    {sent: false, channel: 'webchat', time: 'hoje • 13:15', timestamp: '13:15', text: 'Isso mesmo! Muito obrigada pelo atendimento sempre excelente! ❤️'}
+                ],
+                'pedro-lima': [
+                    {sent: false, channel: 'instagram', time: 'ontem • 18:45', timestamp: '18:45', text: 'Ei! Vi o post de vocês. Que horário vocês abrem amanhã?'},
+                    {sent: true, channel: 'instagram', time: 'ontem • 19:02', timestamp: '19:02', text: 'Oi Pedro! Abrimos às 8h. Te mando mais detalhes no WhatsApp?'},
+                    {sent: false, channel: 'whatsapp', time: 'hoje • 08:30', timestamp: '08:30', text: 'Migrei pro WhatsApp. Preciso de uma solução tech para minha startup!'}
+                ],
+                'carla-mendes': [
+                    {sent: false, channel: 'email', time: 'ontem • 16:20', timestamp: '16:20', text: 'Boa tarde! Recebi o orçamento por e-mail. Está muito bom! Preciso de alguns esclarecimentos técnicos.'},
+                    {sent: true, channel: 'email', time: 'ontem • 16:45', timestamp: '16:45', text: 'Ótimo Carla! Fico à disposição para esclarecer qualquer dúvida técnica.'},
+                    {sent: false, channel: 'whatsapp', time: 'hoje • 09:15', timestamp: '09:15', text: 'Vim pelo WhatsApp para ser mais ágil. Podem me enviar as especificações completas?'}
+                ]
             };
-            // detect categories
-            for(const k in keywords){
-                for(const word of keywords[k]){
-                    if(recent.some(r=>r.text.includes(word))){
-                        issues.push(k);
-                        break;
+            
+            return samples[client.name.toLowerCase().replace(' ', '-')] || [];
+        }
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab contents
+                document.querySelectorAll('[id$="-content"]').forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                // Show corresponding content
+                const tabName = tab.getAttribute('data-tab');
+                document.getElementById(tabName + '-content').style.display = 'block';
+            });
+        });
+
+        // Load unified history functionality
+        function loadHistory() {
+            const btn = document.querySelector('.load-history-btn');
+            const historyDiv = document.getElementById('chat-history');
+            
+            btn.innerHTML = '<div class="loading"></div> Carregando histórico omnicanal...';
+            
+            setTimeout(() => {
+                historyDiv.style.display = 'block';
+                btn.style.display = 'none';
+                
+                // Animate history messages
+                const historyMessages = historyDiv.querySelectorAll('.message');
+                historyMessages.forEach((msg, index) => {
+                    setTimeout(() => {
+                        msg.style.animation = 'messageSlide 0.3s ease-out';
+                    }, index * 200);
+                });
+                
+                // Show channel transitions
+                const transitions = historyDiv.querySelectorAll('.channel-transition');
+                transitions.forEach((transition, index) => {
+                    setTimeout(() => {
+                        transition.style.animation = 'messageSlide 0.3s ease-out';
+                    }, (index + 1) * 500);
+                });
+            }, 1500);
+        }
+
+        // Send message functionality with unified chat
+        function sendMessage() {
+            const input = document.querySelector('.message-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.querySelector('.chat-messages');
+                const config = channelConfig[selectedChannel];
+                const client = clientsData[currentClient];
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message sent';
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="channel-badge ${config.class}">
+                                <i class="${config.icon}"></i> ${config.name}
+                            </span>
+                            <span>agora</span>
+                        </div>
+                        ${message}
+                        <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    </div>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                input.value = '';
+                
+                // Update conversation preview in sidebar
+                updateConversationPreview(currentClient, message, selectedChannel);
+                
+                // Auto scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simulate customer response in different channel sometimes
+                setTimeout(() => {
+                    const responseChannel = Math.random() > 0.7 ? getRandomChannel() : selectedChannel;
+                    const responseConfig = channelConfig[responseChannel];
+                    
+                    // Add channel transition if different
+                    if (responseChannel !== selectedChannel) {
+                        const transitionDiv = document.createElement('div');
+                        transitionDiv.className = 'channel-transition';
+                        transitionDiv.innerHTML = `
+                            <i class="${responseConfig.icon}"></i> Cliente respondeu via ${responseConfig.name}
+                        `;
+                        chatMessages.appendChild(transitionDiv);
                     }
-                }
+                    
+                    const responseText = getRandomResponseForClient(client);
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = 'message';
+                    responseDiv.innerHTML = `
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="channel-badge ${responseConfig.class}">
+                                    <i class="${responseConfig.icon}"></i> ${responseConfig.name}
+                                </span>
+                                <span>agora</span>
+                            </div>
+                            ${responseText}
+                            <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                        </div>
+                    `;
+                    
+                    chatMessages.appendChild(responseDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Update conversation preview with client response
+                    updateConversationPreview(currentClient, responseText, responseChannel);
+                }, 2000);
             }
-            // extract explicit user requests and action words
-            recent.forEach(r=>{
-                if(r.from==='user'){
-                    if(/estorn|reembols|estornar/.test(r.text)) actions.push('Solicita estorno/reembolso');
-                    if(/resetar|link.*senha|senha/.test(r.text)) actions.push('Solicita reset de senha / link de acesso');
-                    if(/entreg|atrasad|hoje/.test(r.text)) actions.push('Solicita atualização sobre entrega');
-                    if(/cobr|duplicad|pagamento/.test(r.text)) actions.push('Relata cobrança indevida/duplicada');
-                    if(/cancelar/.test(r.text)) actions.push('Solicita cancelamento');
+        }
+
+        // Update conversation preview in sidebar
+        function updateConversationPreview(clientId, message, channel) {
+            const conversationItem = document.querySelector(`[data-client="${clientId}"]`);
+            const preview = conversationItem.querySelector('.conversation-preview');
+            const time = conversationItem.querySelector('.conversation-time');
+            const channelIcon = conversationItem.querySelector('.conversation-channel');
+            
+            const config = channelConfig[channel];
+            
+            // Update preview text (limit to 30 chars)
+            const previewText = message.length > 30 ? message.substring(0, 30) + '...' : message;
+            preview.querySelector('span').textContent = previewText;
+            
+            // Update channel icon
+            channelIcon.className = `${config.icon} conversation-channel`;
+            channelIcon.style.color = getChannelColor(channel);
+            
+            // Update time
+            time.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function getChannelColor(channel) {
+            const colors = {
+                whatsapp: '#25d366',
+                email: '#3b82f6',
+                webchat: '#7c3aed',
+                instagram: '#e1306c'
+            };
+            return colors[channel] || '#6b7280';
+        }
+
+        // Helper functions for realistic simulation
+        function getRandomChannel() {
+            const channels = ['whatsapp', 'email', 'webchat'];
+            return channels[Math.floor(Math.random() * channels.length)];
+        }
+
+        function getRandomResponseForClient(client) {
+            const responses = {
+                'Maria Clara Silva': [
+                    'Perfeito! Muito obrigada pelo esclarecimento. 😊',
+                    'Ótimo! E sobre o desconto mencionado?',
+                    'Entendi! Vou fechar o pedido então.',
+                    'Excelente atendimento como sempre! 👏'
+                ],
+                'João Pereira': [
+                    'Entendi. Pode enviar por e-mail para documentar?',
+                    'Preciso analisar com a diretoria.',
+                    'Ótimo! Aguardo a proposta formal.',
+                    'Muito profissional o atendimento.'
+                ],
+                'Ana Costa': [
+                    'Muito obrigada! Vocês são ótimos! ❤️',
+                    'Perfeito! Até o próximo mês então.',
+                    'Sempre um prazer ser atendida aqui!',
+                    'Obrigada pela agilidade de sempre! 😊'
+                ],
+                'Pedro Lima': [
+                    'Show! Vocês são muito inovadores! 🚀',
+                    'Perfeito! Isso vai revolucionar minha startup!',
+                    'Top! Quando podemos implementar?',
+                    'Massa! Vamos fechar negócio! 💪'
+                ],
+                'Carla Mendes': [
+                    'Excelente! Preciso da documentação técnica.',
+                    'Perfeito! Está tudo muito bem detalhado.',
+                    'Ótimo trabalho! Vou recomendar vocês.',
+                    'Muito profissional. Obrigada pela clareza.'
+                ]
+            };
+            
+            const clientResponses = responses[client.name] || responses['Maria Clara Silva'];
+            return clientResponses[Math.floor(Math.random() * clientResponses.length)];
+        }
+
+        // Auto-resize textarea
+        document.querySelector('.message-input').addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+
+        // Enter to send message
+        document.querySelector('.message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Toggle differentials popup
+        function toggleDifferentials() {
+            const differentials = document.getElementById('differentials');
+            differentials.classList.toggle('show');
+        }
+
+        // Search functionality
+        document.querySelector('.search-bar input').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            // Simulate search results
+            if (query.length > 2) {
+                console.log('Searching unified conversations for:', query);
+                // Here you would implement actual search logic across all channels
+            }
+        });
+
+        // Search conversations
+        document.querySelector('.conversations-search input').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const conversations = document.querySelectorAll('.conversation-item');
+            
+            conversations.forEach(conv => {
+                const name = conv.querySelector('.conversation-name').textContent.toLowerCase();
+                const preview = conv.querySelector('.conversation-preview span').textContent.toLowerCase();
+                
+                if (name.includes(query) || preview.includes(query)) {
+                    conv.style.display = 'flex';
+                } else {
+                    conv.style.display = 'none';
                 }
             });
-
-            // build concise summary
-            const uniq = (arr)=>[...new Set(arr)];
-            const issueText = uniq(issues).length ? (`Assuntos detectados: ${uniq(issues).join(', ')}.`) : '';
-            const actionText = uniq(actions).length ? (`Principais solicitações: ${uniq(actions).join('; ')}.`) : '';
-            // include brief excerpt of last customer message
-            const lastUser = [...recent].reverse().find(r=>r.from==='user');
-            const lastExcerpt = lastUser ? `Última mensagem do cliente: "${truncate(lastUser.text, 140)}".` : '';
-            const status = `Mensagens registradas: ${conv.messages.length}.`;
-            const summary = [issueText, actionText, lastExcerpt, status].filter(Boolean).join(' ');
-            return capitalizeFirst(summary || 'Nenhum chamado relevante identificado nos últimos registros.');
-        }
-
-        function truncate(s, n){
-            return s.length>n ? s.slice(0,n-1) + '…' : s;
-        }
-        function capitalizeFirst(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
-
-        // UI events
-        document.getElementById('filter').addEventListener('input', (e)=> renderConversations(e.target.value));
-        document.getElementById('sendBtn').addEventListener('click', sendMessage);
-        document.getElementById('msgInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); sendMessage(); }});
-
-        function sendMessage(){
-            const input = document.getElementById('msgInput');
-            const text = input.value.trim();
-            if(!text || !activeConv) return;
-            const now = new Date();
-            const time = now.toISOString().slice(0,16).replace('T',' ');
-            const msg = {from:'agent', text, time};
-            activeConv.messages.push(msg);
-            renderMessages(activeConv.messages);
-            input.value = '';
-            // regenerate summary automatically after sending
-            document.getElementById('summary').value = generateSummary(activeConv);
-            document.getElementById('metaCount').textContent = activeConv.messages.length;
-        }
-
-        document.getElementById('regen').addEventListener('click', ()=>{
-            if(!activeConv) return alert('Selecione uma conversa primeiro.');
-            document.getElementById('summary').value = generateSummary(activeConv) + ' (regenerado)';
         });
 
-        document.getElementById('saveSummary').addEventListener('click', ()=>{
-            if(!activeConv) return alert('Selecione uma conversa primeiro.');
-            // Simula salvar: armazena no objeto local
-            activeConv.summary = document.getElementById('summary').value;
-            alert('Resumo salvo localmente para ' + activeConv.name + '.');
+        // Initialize tooltips and auto-show differentials
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize with Maria Silva (first client)
+            switchToClient('maria-silva');
+            
+            // Auto-show differentials after 3 seconds for demo
+            setTimeout(() => {
+                toggleDifferentials();
+            }, 3000);
         });
 
-        document.getElementById('viewLog').addEventListener('click', ()=>{
-            if(!activeConv) return alert('Selecione uma conversa primeiro.');
-            const log = activeConv.messages.map(m=>`${m.time} - ${m.from}: ${m.text}`).join('\n\n');
-            // abre em nova janela com histórico
-            const w = window.open('', '_blank', 'width=700,height=600');
-            w.document.write('<pre style="white-space:pre-wrap;font-family:inherit;padding:12px;">'+escapeHtml(log)+'</pre>');
-        });
-
-        // small helpers
-        document.getElementById('closeBtn').addEventListener('click', ()=> alert('Fechar conversa (simulado).'));
-        document.getElementById('tagBtn').addEventListener('click', ()=> {
-            const tag = prompt('Adicionar tag:');
-            if(tag && activeConv) alert('Tag "'+tag+'" adicionada a ' + activeConv.name + ' (simulado).');
-        });
-
-        // init
-        renderConversations();
-    });
+        // Simulate real-time updates
+        setInterval(() => {
+            const onlineCount = Math.floor(Math.random() * 5) + 10;
+            document.querySelector('.status-indicator').innerHTML = `
+                <div class="status-dot"></div>
+                Online (${onlineCount})
+            `;
+        }, 10000);

@@ -1,90 +1,530 @@
-<!-- 
- Quero fazer uma página HTML. Para fazer a tela principal, com base no Crisp e no Chatwoot? 
- Só usar IA e falar pra ter um campo de resumo dos últimos chamados do cliente que está com o chat em aberto, aí vamos aprimorando,
-    vai ser a tela que vai constar no pdf entregável de amanhã
--->
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Painel de Chat - Resumo de Chamados (IA)</title>
-
-        <!-- Estilos movidos para styles.css -->
-        <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrativa - Painel Omnicanal</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-        <div class="app">
-                <!-- Left: Conversations -->
-                <div class="col sidebar" role="navigation" aria-label="Conversas">
-                        <header>
-                                <div style="display:flex;flex-direction:column;">
-                                        <span class="brand">Integrativa Chat</span>
-                                        <span class="small">Tela principal estilo Crisp / Chatwoot</span>
-                                </div>
-                        </header>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-comments"></i> Integrativa
+            </div>
+            
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar clientes, conversas ou tickets...">
+            </div>
+            
+            <div class="header-actions">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    Online
+                </div>
+                
+                <div class="header-icon" data-tooltip="Notificações">
+                    <i class="fas fa-bell"></i>
+                    <div class="notification-badge"></div>
+                </div>
+                
+                <div class="header-icon" data-tooltip="Configurações">
+                    <i class="fas fa-cog"></i>
+                </div>
+                
+                <div class="header-icon" data-tooltip="Perfil - Lucas Oliveira">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
 
-                        <div class="search" aria-hidden="false">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:.6">
-                                        <path d="M21 21l-4.35-4.35" stroke="#374151" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="11" cy="11" r="6" stroke="#374151" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <input id="filter" placeholder="Pesquisar cliente ou assunto..." />
+        <!-- Conversations Sidebar -->
+        <aside class="conversations-sidebar">
+            <div class="conversations-header">
+                <div class="conversations-title">Conversas</div>
+                <div class="conversations-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar conversas...">
+                </div>
+            </div>
+            
+            <div class="conversations-list">
+                <div class="conversation-item active" data-client="maria-silva">
+                    <div class="conversation-avatar" style="background: #2563eb;">MS</div>
+                    <div class="conversation-status status-online"></div>
+                    <div class="conversation-content">
+                        <div class="conversation-name">Maria Clara Silva</div>
+                        <div class="conversation-preview">
+                            <i class="fab fa-whatsapp conversation-channel" style="color: #25d366;"></i>
+                            <span>Perfeito! E sobre o desconto...</span>
                         </div>
+                    </div>
+                    <div class="conversation-meta">
+                        <div class="conversation-time">15:50</div>
+                        <div class="unread-badge">2</div>
+                    </div>
+                </div>
+                
+                <div class="conversation-item" data-client="joao-pereira">
+                    <div class="conversation-avatar" style="background: #16a34a;">JP</div>
+                    <div class="conversation-status status-away"></div>
+                    <div class="conversation-content">
+                        <div class="conversation-name">João Pereira</div>
+                        <div class="conversation-preview">
+                            <i class="fas fa-envelope conversation-channel" style="color: #3b82f6;"></i>
+                            <span>Aguardo retorno da proposta</span>
+                        </div>
+                    </div>
+                    <div class="conversation-meta">
+                        <div class="conversation-time">14:32</div>
+                    </div>
+                </div>
+                
+                <div class="conversation-item" data-client="ana-costa">
+                    <div class="conversation-avatar" style="background: #dc2626;">AC</div>
+                    <div class="conversation-status status-online"></div>
+                    <div class="conversation-content">
+                        <div class="conversation-name">Ana Costa</div>
+                        <div class="conversation-preview">
+                            <i class="fas fa-comments conversation-channel" style="color: #7c3aed;"></i>
+                            <span>Muito obrigada pelo atendimento!</span>
+                        </div>
+                    </div>
+                    <div class="conversation-meta">
+                        <div class="conversation-time">13:15</div>
+                    </div>
+                </div>
+                
+                <div class="conversation-item" data-client="pedro-lima">
+                    <div class="conversation-avatar" style="background: #ea580c;">PL</div>
+                    <div class="conversation-status status-offline"></div>
+                    <div class="conversation-content">
+                        <div class="conversation-name">Pedro Lima</div>
+                        <div class="conversation-preview">
+                            <i class="fab fa-instagram conversation-channel" style="color: #e1306c;"></i>
+                            <span>Quando vocês abrem amanhã?</span>
+                        </div>
+                    </div>
+                    <div class="conversation-meta">
+                        <div class="conversation-time">ontem</div>
+                        <div class="unread-badge">1</div>
+                    </div>
+                </div>
+                
+                <div class="conversation-item" data-client="carla-mendes">
+                    <div class="conversation-avatar" style="background: #7c3aed;">CM</div>
+                    <div class="conversation-status status-online"></div>
+                    <div class="conversation-content">
+                        <div class="conversation-name">Carla Mendes</div>
+                        <div class="conversation-preview">
+                            <i class="fas fa-envelope conversation-channel" style="color: #3b82f6;"></i>
+                            <span>Recebi o orçamento, muito bom!</span>
+                        </div>
+                    </div>
+                    <div class="conversation-meta">
+                        <div class="conversation-time">ontem</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
-                        <div class="conv-list" id="conversations" aria-live="polite"></div>
-                        <footer>Pronto para entregar: campo de resumo automático à direita.</footer>
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <div class="chat-header">
+                <div class="chat-client-info">
+                    <div class="client-avatar">MC</div>
+                    <div class="client-details">
+                        <h3>Maria Clara Silva</h3>
+                        <div class="client-status">
+                            <span>Chat Omnicanal • Ativa há 2 min</span>
+                        </div>
+                        <div class="active-channels">
+                            <span class="mini-channel-badge whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </span>
+                            <span class="mini-channel-badge email">
+                                <i class="fas fa-envelope"></i> E-mail
+                            </span>
+                            <span class="mini-channel-badge webchat">
+                                <i class="fas fa-comments"></i> Web
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-actions">
+                    <button class="action-btn">
+                        <i class="fas fa-phone"></i> Ligar
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-video"></i> Vídeo
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-messages">
+                <button class="load-history-btn" onclick="loadHistory()">
+                    <i class="fas fa-chevron-up"></i> Ver histórico completo omnicanal
+                </button>
+                
+                <div class="attendant-change">
+                    <i class="fas fa-exchange-alt"></i>
+                    <strong>Transferência de atendimento:</strong> Ana Santos → Lucas Oliveira
+                    <br><small>Todo o histórico unificado está disponível para continuidade do atendimento</small>
+                </div>
+                
+                <div id="chat-history" style="display: none;">
+                    <!-- Histórico unificado de 2 dias atrás -->
+                    <div class="message">
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="channel-badge email">
+                                    <i class="fas fa-envelope"></i> E-mail
+                                </span>
+                                <span>há 2 dias • 14:30</span>
+                            </div>
+                            Olá! Gostaria de saber mais informações sobre o produto X. Vi o anúncio no Instagram e fiquei interessada.
+                            <div class="message-time">Atendido por: Ana Santos</div>
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="channel-badge email">
+                                    <i class="fas fa-envelope"></i> E-mail
+                                </span>
+                                <span>há 2 dias • 14:32</span>
+                            </div>
+                            Olá Maria! Fico feliz em ajudar. Enviei todas as informações detalhadas por e-mail com catálogo completo.
+                            <div class="message-time">14:32</div>
+                        </div>
+                    </div>
+
+                    <div class="channel-transition">
+                        <i class="fas fa-exchange-alt"></i> Cliente migrou para WhatsApp
+                    </div>
+                    
+                    <!-- Transição para WhatsApp - ontem -->
+                    <div class="message">
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="channel-badge whatsapp">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </span>
+                                <span>ontem • 16:15</span>
+                            </div>
+                            Oi! Recebi o e-mail, obrigada! Mas tenho algumas dúvidas sobre entrega. Pode me ajudar?
+                            <div class="message-time">Atendido por: Carlos Lima</div>
+                        </div>
+                    </div>
+                    
+                    <div class="message sent">
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="channel-badge whatsapp">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </span>
+                                <span>ontem • 16:18</span>
+                            </div>
+                            Claro! Atendemos sua região normalmente. Qual seu CEP para calcular o frete?
+                            <div class="message-time">16:18</div>
+                        </div>
+                    </div>
+
+                    <div class="message">
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="channel-badge whatsapp">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </span>
+                                <span>ontem • 16:20</span>
+                            </div>
+                            13100-000 - Campinas/SP
+                            <div class="message-time">Atendido por: Carlos Lima</div>
+                        </div>
+                    </div>
+
+                    <div class="channel-transition">
+                        <i class="fas fa-user-friends"></i> Transferência: Carlos Lima → Lucas Oliveira
+                    </div>
+                </div>
+                
+                <!-- Conversa atual - hoje -->
+                <div class="message">
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="channel-badge whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </span>
+                            <span>hoje • 15:48</span>
+                        </div>
+                        Oi! Voltando ao assunto da entrega... Vocês conseguem entregar até sexta-feira?
+                        <div class="message-time">15:48</div>
+                    </div>
+                </div>
+                
+                <div class="message sent">
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="channel-badge whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </span>
+                            <span>hoje • 15:49</span>
+                        </div>
+                        Olá Maria! Vi todo seu histórico aqui. Para Campinas, conseguimos entregar até quinta-feira. O frete fica R$ 15,00.
+                        <div class="message-time">15:49</div>
+                    </div>
+                </div>
+                
+                <div class="message">
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="channel-badge whatsapp">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </span>
+                            <span>hoje • 15:50</span>
+                        </div>
+                        Perfeito! E sobre o desconto que foi mencionado no e-mail da Ana?
+                        <div class="message-time">15:50</div>
+                    </div>
                 </div>
 
-                <!-- Center: Chat -->
-                <div class="col center" role="main" aria-label="Chat">
-                        <header style="display:flex;justify-content:space-between;align-items:center;">
-                                <div>
-                                        <div id="activeName" style="font-weight:700">Selecione uma conversa</div>
-                                        <div class="small" id="activeStatus">Última atividade: -</div>
-                                </div>
-                                <div style="display:flex;gap:8px;align-items:center;">
-                                        <button id="tagBtn" class="btn" style="background:#10b981;border:0;">Adicionar tag</button>
-                                        <button id="closeBtn" class="btn">Fechar</button>
-                                </div>
-                        </header>
-
-                        <div class="messages" id="messages" aria-live="polite" tabindex="0">
-                                <div class="small" style="opacity:.6">Nenhuma conversa selecionada</div>
-                        </div>
-
-                        <div class="composer" role="form" aria-label="Compor mensagem">
-                                <input id="msgInput" placeholder="Digite uma mensagem..." disabled />
-                                <button class="btn" id="sendBtn" disabled>Enviar</button>
-                        </div>
+                <div class="channel-transition">
+                    <i class="fas fa-envelope"></i> Cliente enviou e-mail simultâneo
                 </div>
 
-                <!-- Right: Resumo / Dados do Cliente -->
-                <div class="col right" role="complementary" aria-label="Resumo dos últimos chamados">
-                        <h3>Resumo dos últimos chamados (IA)</h3>
-                        <div class="small" style="margin-bottom:8px;">Este campo apresenta um resumo automático dos últimos chamados do cliente com o chat aberto. Pode ser editado antes de salvar.</div>
-
-                        <div class="meta-line" style="margin-bottom:10px;">
-                                <div class="small">Cliente: <strong id="metaClient">-</strong></div>
-                                <div class="small">Chamados: <strong id="metaCount">0</strong></div>
+                <div class="message">
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="channel-badge email">
+                                <i class="fas fa-envelope"></i> E-mail
+                            </span>
+                            <span>hoje • 15:52</span>
                         </div>
-
-                        <textarea id="summary" placeholder="Resumo gerado aparecerá aqui..." aria-label="Resumo automático"></textarea>
-
-                        <div class="control-row">
-                                <button id="regen" class="btn" style="background:#7c3aed">Regenerar resumo</button>
-                                <button id="saveSummary" class="btn" style="background:#0ea5e9">Salvar</button>
-                                <button id="viewLog" class="btn" style="background:#6b7280">Ver histórico</button>
-                        </div>
-
-                        <div style="margin-top:12px;">
-                                <div class="small">Resumo gerado por um algoritmo local simples. Para gerar resumos via IA real, integrar API externa.</div>
-                        </div>
+                        Olá, estou conversando via WhatsApp também, mas queria confirmar por e-mail os valores e condições para ter tudo documentado. Pode me enviar uma proposta formal?
+                        <div class="message-time">15:52</div>
+                    </div>
                 </div>
+            </div>
+            
+            <div class="chat-input">
+                <div class="input-container">
+                    <div class="channel-selector">
+                        <div class="channel-dropdown whatsapp" onclick="toggleChannelSelector()">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                            <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 10px;"></i>
+                        </div>
+                        <div class="channel-options" id="channelOptions">
+                            <div class="channel-option" onclick="selectChannel('whatsapp')">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>WhatsApp</span>
+                            </div>
+                            <div class="channel-option" onclick="selectChannel('email')">
+                                <i class="fas fa-envelope"></i>
+                                <span>E-mail</span>
+                            </div>
+                            <div class="channel-option" onclick="selectChannel('webchat')">
+                                <i class="fas fa-comments"></i>
+                                <span>Chat Web</span>
+                            </div>
+                            <div class="channel-option" onclick="selectChannel('instagram')">
+                                <i class="fab fa-instagram"></i>
+                                <span>Instagram</span>
+                            </div>
+                        </div>
+                    </div>
+                    <textarea class="message-input" placeholder="Digite sua mensagem..." rows="1"></textarea>
+                    <div class="input-actions">
+                        <button class="input-btn" data-tooltip="Emoji">
+                            <i class="fas fa-smile"></i>
+                        </button>
+                        <button class="input-btn" data-tooltip="Anexar arquivo">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <button class="input-btn send-btn" data-tooltip="Enviar" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Customer Panel -->
+        <aside class="customer-panel">
+            <div class="customer-header">
+                <div class="customer-info">
+                    <div class="customer-avatar">MC</div>
+                    <div class="customer-name">Maria Clara Silva</div>
+                    <div class="customer-details">
+                        <div><i class="fas fa-envelope"></i> maria.clara@email.com</div>
+                        <div><i class="fas fa-phone"></i> (19) 99999-8888</div>
+                        <div><i class="fas fa-map-marker-alt"></i> Campinas, SP</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel-tabs">
+                <div class="tab active" data-tab="history">Histórico</div>
+                <div class="tab" data-tab="notes">Anotações</div>
+                <div class="tab" data-tab="reports">Relatórios</div>
+            </div>
+            
+            <div class="tab-content">
+                <div id="history-content">
+                    <div class="history-item">
+                        <div class="history-date">18/10/2025 - Chat Omnicanal</div>
+                        <div class="history-summary">
+                            Conversas através de <strong>E-mail</strong>, <strong>WhatsApp</strong> e <strong>Chat Web</strong>. 
+                            Primeira consulta sobre produto X. Informações detalhadas enviadas.
+                            <br><strong>Atendentes:</strong> Ana Santos, Carlos Lima, Lucas Oliveira
+                        </div>
+                    </div>
+                    
+                    <div class="history-item">
+                        <div class="history-date">15/10/2025 - WhatsApp + E-mail</div>
+                        <div class="history-summary">
+                            Cliente iniciou por <strong>WhatsApp</strong> com dúvidas sobre prazo. Migrou para <strong>E-mail</strong> 
+                            para receber proposta formal. Esclarecimentos fornecidos em ambos canais.
+                            <br><strong>Atendente:</strong> Carlos Lima
+                        </div>
+                    </div>
+                    
+                    <div class="history-item">
+                        <div class="history-date">12/10/2025 - Chat Web</div>
+                        <div class="history-summary">
+                            Primeiro contato via <strong>Chat Web</strong> do site. Solicitação de orçamento inicial. 
+                            Proposta enviada posteriormente por e-mail.
+                            <br><strong>Atendente:</strong> Ana Santos
+                        </div>
+                    </div>
+
+                    <div class="history-item">
+                        <div class="history-date">10/10/2025 - Instagram</div>
+                        <div class="history-summary">
+                            Interação inicial via <strong>Instagram Direct</strong>. Cliente demonstrou interesse 
+                            após ver post promocional. Direcionada para outros canais.
+                            <br><strong>Atendente:</strong> Social Media Bot
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="notes-content" style="display: none;">
+                    <textarea class="notes-textarea" placeholder="Adicione anotações internas sobre este cliente...">Cliente interessado em compra recorrente. 
+Prefere contato via WhatsApp.
+Empresa: Silva & Associados
+Decisor: Própria cliente</textarea>
+                </div>
+                
+                <div id="reports-content" style="display: none;">
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-value">12</div>
+                            <div class="kpi-label">Mensagens Totais</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">4</div>
+                            <div class="kpi-label">Canais Usados</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">1m 30s</div>
+                            <div class="kpi-label">Tempo Médio</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">98%</div>
+                            <div class="kpi-label">Satisfação</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">3</div>
+                            <div class="kpi-label">Atendentes</div>
+                        </div>
+                        <div class="kpi-card">
+                            <div class="kpi-value">0</div>
+                            <div class="kpi-label">Transferências</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Diferenciais Popup -->
+    <div class="differentials" id="differentials">
+        <div class="differentials-header">
+            <div class="differentials-title">
+                <i class="fas fa-star"></i> Diferenciais da Integrativa
+            </div>
+            <button class="close-btn" onclick="toggleDifferentials()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
+        
+        <div class="differentials-grid">
+            <div class="differential-item">
+                <div class="differential-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                <div class="differential-text">
+                    <div class="differential-title">Histórico Unificado</div>
+                    <div class="differential-desc">Todas as interações em um único painel</div>
+                </div>
+            </div>
+            
+            <div class="differential-item">
+                <div class="differential-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <div class="differential-text">
+                    <div class="differential-title">Continuidade</div>
+                    <div class="differential-desc">Contexto completo para o próximo atendente</div>
+                </div>
+            </div>
+            
+            <div class="differential-item">
+                <div class="differential-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <div class="differential-text">
+                    <div class="differential-title">Roteamento Inteligente</div>
+                    <div class="differential-desc">Distribuição automática por perfil</div>
+                </div>
+            </div>
+            
+            <div class="differential-item">
+                <div class="differential-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="differential-text">
+                    <div class="differential-title">Visão 360º</div>
+                    <div class="differential-desc">Dados completos de múltiplos canais</div>
+                </div>
+            </div>
+            
+            <div class="differential-item">
+                <div class="differential-icon">
+                    <i class="fas fa-sync"></i>
+                </div>
+                <div class="differential-text">
+                    <div class="differential-title">Integração Omnichat</div>
+                    <div class="differential-desc">Sincronização em tempo real</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <!-- Script movido para app.js -->
-        <script src="app.js"></script>
+    <!-- Floating Action Button -->
+    <div class="floating-btn" onclick="toggleDifferentials()" data-tooltip="Ver Diferenciais">
+        <i class="fas fa-star"></i>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
