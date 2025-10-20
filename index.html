@@ -1,293 +1,90 @@
 <!-- 
  Quero fazer uma página HTML. Para fazer a tela principal, com base no Crisp e no Chatwoot? 
  Só usar IA e falar pra ter um campo de resumo dos últimos chamados do cliente que está com o chat em aberto, aí vamos aprimorando,
-  vai ser a tela que vai constar no pdf entregável de amanhã
+    vai ser a tela que vai constar no pdf entregável de amanhã
 -->
 
 <!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Painel de Chat - Integradiva (modelo Crisp / Chatwoot)</title>
-    <style>
-        :root{
-            --bg:#f5f7fb; --panel:#ffffff; --muted:#6b7280;
-            --accent:#0066ff; --accent-2:#00b388;
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-        }
-        *{box-sizing:border-box}
-        body{margin:0;background:var(--bg);color:#0f172a}
-        .app{display:grid;grid-template-columns:280px 1fr 360px;gap:18px;padding:18px;height:100vh}
-        .panel{background:var(--panel);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(16,24,40,0.06);overflow:hidden;display:flex;flex-direction:column}
-        .left .search{padding:8px;border-radius:8px;border:1px solid #e6e9ef;background:#fafbfc}
-        .contacts{margin-top:10px;overflow:auto;flex:1}
-        .contact{display:flex;gap:10px;padding:10px;border-radius:8px;align-items:center;cursor:pointer}
-        .contact:hover{background:#f1f6ff}
-        .avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#e4f0ff,#dbeffd);display:flex;align-items:center;justify-content:center;font-weight:600;color:#034ea2}
-        .center{display:flex;flex-direction:column}
-        .chat-header{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid #eef2f7}
-        .chat-area{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
-        .message{max-width:72%;padding:10px 12px;border-radius:10px;line-height:1.3}
-        .msg-me{margin-left:auto;background:linear-gradient(90deg,#e6f0ff,#cfe6ff)}
-        .msg-other{background:#f3f4f6}
-        .input-bar{display:flex;gap:8px;padding:12px;border-top:1px solid #eef2f7}
-        .input-bar textarea{flex:1;resize:none;border-radius:10px;padding:10px;border:1px solid #e6e9ef;height:56px}
-        .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:none;cursor:pointer}
-        .right .meta{display:flex;flex-direction:column;gap:12px;overflow:auto}
-        .section-title{font-size:13px;color:var(--muted);margin-bottom:6px}
-        .ticket{padding:10px;border-radius:8px;border:1px solid #eef2f7;background:#fbfdff}
-        .summary{white-space:pre-wrap;background:#0f172a;color:#fff;padding:12px;border-radius:8px}
-        .small{font-size:13px;color:var(--muted)}
-        .actions{display:flex;gap:8px}
-        .ghost{background:transparent;border:1px solid #e6e9ef;padding:8px;border-radius:8px;cursor:pointer}
-        @media (max-width:1000px){.app{grid-template-columns:1fr;grid-auto-rows:auto;padding:12px}.right{display:none}}
-    </style>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Painel de Chat - Resumo de Chamados (IA)</title>
+
+        <!-- Estilos movidos para styles.css -->
+        <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="app">
-        <!-- Left: contacts -->
-        <div class="panel left">
-            <input class="search" placeholder="Pesquisar conversas, clientes..." id="searchInput" />
-            <div class="contacts" id="contactsList" role="list">
-                <!-- contatos gerados por JS -->
-            </div>
-        </div>
+        <div class="app">
+                <!-- Left: Conversations -->
+                <div class="col sidebar" role="navigation" aria-label="Conversas">
+                        <header>
+                                <div style="display:flex;flex-direction:column;">
+                                        <span class="brand">Integrativa Chat</span>
+                                        <span class="small">Tela principal estilo Crisp / Chatwoot</span>
+                                </div>
+                        </header>
 
-        <!-- Center: chat -->
-        <div class="panel center">
-            <div class="chat-header" id="chatHeader">
-                <div style="display:flex;gap:12px;align-items:center">
-                    <div class="avatar" id="chatAvatar">C</div>
-                    <div>
-                        <div id="chatName" style="font-weight:700">Selecione um cliente</div>
-                        <div class="small" id="chatMeta">Status do chat • Última interação</div>
-                    </div>
-                </div>
-                <div style="margin-left:auto" class="small">
-                    <button class="ghost" onclick="openTranscript()">Exportar transcript</button>
-                </div>
-            </div>
-
-            <div class="chat-area" id="chatArea">
-                <div class="small">Nenhuma conversa selecionada. Clique em um cliente à esquerda.</div>
-            </div>
-
-            <div class="input-bar">
-                <textarea id="messageInput" placeholder="Digite sua mensagem..."></textarea>
-                <button class="btn" id="sendBtn">Enviar</button>
-            </div>
-        </div>
-
-        <!-- Right: customer panel + IA summary -->
-        <div class="panel right">
-            <div class="meta">
-                <div>
-                    <div class="section-title">Informações do cliente</div>
-                    <div style="display:flex;gap:10px;align-items:center">
-                        <div class="avatar" id="infoAvatar">C</div>
-                        <div>
-                            <div id="infoName" style="font-weight:700">—</div>
-                            <div class="small" id="infoEmail">—</div>
+                        <div class="search" aria-hidden="false">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:.6">
+                                        <path d="M21 21l-4.35-4.35" stroke="#374151" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <circle cx="11" cy="11" r="6" stroke="#374151" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <input id="filter" placeholder="Pesquisar cliente ou assunto..." />
                         </div>
-                    </div>
+
+                        <div class="conv-list" id="conversations" aria-live="polite"></div>
+                        <footer>Pronto para entregar: campo de resumo automático à direita.</footer>
                 </div>
 
-                <div>
-                    <div class="section-title">Últimos chamados (histórico)</div>
-                    <div id="ticketsList" style="display:flex;flex-direction:column;gap:8px">
-                        <!-- tickets gerados por JS -->
-                    </div>
+                <!-- Center: Chat -->
+                <div class="col center" role="main" aria-label="Chat">
+                        <header style="display:flex;justify-content:space-between;align-items:center;">
+                                <div>
+                                        <div id="activeName" style="font-weight:700">Selecione uma conversa</div>
+                                        <div class="small" id="activeStatus">Última atividade: -</div>
+                                </div>
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                        <button id="tagBtn" class="btn" style="background:#10b981;border:0;">Adicionar tag</button>
+                                        <button id="closeBtn" class="btn">Fechar</button>
+                                </div>
+                        </header>
+
+                        <div class="messages" id="messages" aria-live="polite" tabindex="0">
+                                <div class="small" style="opacity:.6">Nenhuma conversa selecionada</div>
+                        </div>
+
+                        <div class="composer" role="form" aria-label="Compor mensagem">
+                                <input id="msgInput" placeholder="Digite uma mensagem..." disabled />
+                                <button class="btn" id="sendBtn" disabled>Enviar</button>
+                        </div>
                 </div>
 
-                <div>
-                    <div class="section-title">Resumo automático (IA)</div>
-                    <div style="display:flex;gap:8px;margin-bottom:8px">
-                        <button class="btn" id="generateSummary">Gerar resumo IA</button>
-                        <button class="ghost" id="regenerateSummary">Regerar</button>
-                    </div>
-                    <div id="iaSummary" class="summary">Nenhum resumo gerado. Use "Gerar resumo IA" para obter um resumo dos últimos chamados do cliente com o chat aberto.</div>
-                    <div class="small" style="margin-top:8px">Sugestão: o resumo mostra tópico, status e ações recomendadas pelo atendente (gerado por IA).</div>
-                </div>
+                <!-- Right: Resumo / Dados do Cliente -->
+                <div class="col right" role="complementary" aria-label="Resumo dos últimos chamados">
+                        <h3>Resumo dos últimos chamados (IA)</h3>
+                        <div class="small" style="margin-bottom:8px;">Este campo apresenta um resumo automático dos últimos chamados do cliente com o chat aberto. Pode ser editado antes de salvar.</div>
 
-                <div>
-                    <div class="section-title">Contexto rápido</div>
-                    <div class="small">Atalhos: analisar tickets, enviar follow-up, marcar prioridade. Este painel serve como proposta inicial para o PDF entregável.</div>
+                        <div class="meta-line" style="margin-bottom:10px;">
+                                <div class="small">Cliente: <strong id="metaClient">-</strong></div>
+                                <div class="small">Chamados: <strong id="metaCount">0</strong></div>
+                        </div>
+
+                        <textarea id="summary" placeholder="Resumo gerado aparecerá aqui..." aria-label="Resumo automático"></textarea>
+
+                        <div class="control-row">
+                                <button id="regen" class="btn" style="background:#7c3aed">Regenerar resumo</button>
+                                <button id="saveSummary" class="btn" style="background:#0ea5e9">Salvar</button>
+                                <button id="viewLog" class="btn" style="background:#6b7280">Ver histórico</button>
+                        </div>
+
+                        <div style="margin-top:12px;">
+                                <div class="small">Resumo gerado por um algoritmo local simples. Para gerar resumos via IA real, integrar API externa.</div>
+                        </div>
                 </div>
-            </div>
         </div>
-    </div>
 
-    <script>
-        // Dados de exemplo
-        const clients = [
-            { id: 'c1', name: 'Carlos Silva', email: 'carlos.silva@exemplo.com', avatar: 'CS', status: 'Ativo', lastSeen: 'Agora', conv: [
-                { who:'other', text:'Olá, preciso de ajuda com meu pedido #1234', time:'09:12' },
-                { who:'me', text:'Claro, posso ajudar. Qual é o problema?', time:'09:13' },
-                { who:'other', text:'O produto chegou com defeito.', time:'09:15' },
-            ], tickets:[
-                { id:101, subject:'Pedido 1234 - Produto com defeito', status:'Aberto', date:'2025-10-10', snippet:'Cliente reportou dano no produto recebido.'},
-                { id:98, subject:'Dúvida sobre rastreamento', status:'Fechado', date:'2025-09-28', snippet:'Informado código de rastreio.'},
-                { id:73, subject:'Solicitação de troca', status:'Resolvido', date:'2025-08-17', snippet:'Troca autorizada e enviada.'}
-            ]},
-            { id: 'c2', name: 'Mariana Costa', email: 'mariana@exemplo.com', avatar: 'MC', status: 'Aguardando', lastSeen: '2h', conv: [
-                { who:'other', text:'Quando estará disponível o reembolso?', time:'08:01' },
-                { who:'me', text:'Ainda não há previsão, estou verificando.', time:'08:10' },
-            ], tickets:[
-                { id:202, subject:'Reembolso pedido 2045', status:'Em análise', date:'2025-10-05', snippet:'Suporte financeiro analisando reembolso.'},
-                { id:199, subject:'Cobrança indevida', status:'Fechado', date:'2025-09-21', snippet:'Estornado valor cobrado em duplicidade.'}
-            ]},
-            // mais clientes podem ser adicionados
-        ];
-
-        const contactsList = document.getElementById('contactsList');
-        const chatArea = document.getElementById('chatArea');
-        const chatName = document.getElementById('chatName');
-        const chatMeta = document.getElementById('chatMeta');
-        const chatAvatar = document.getElementById('chatAvatar');
-        const infoAvatar = document.getElementById('infoAvatar');
-        const infoName = document.getElementById('infoName');
-        const infoEmail = document.getElementById('infoEmail');
-        const ticketsList = document.getElementById('ticketsList');
-        const iaSummary = document.getElementById('iaSummary');
-
-        let activeClient = null;
-
-        function renderContacts(filter='') {
-            contactsList.innerHTML = '';
-            const filtered = clients.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()) || c.email.toLowerCase().includes(filter.toLowerCase()));
-            filtered.forEach(c => {
-                const el = document.createElement('div');
-                el.className = 'contact';
-                el.innerHTML = `
-                    <div class="avatar">${c.avatar}</div>
-                    <div style="flex:1">
-                        <div style="font-weight:700">${c.name}</div>
-                        <div class="small">${c.email} • ${c.lastSeen}</div>
-                    </div>
-                    <div class="small" style="color:var(--muted)">${c.tickets.length} chamados</div>
-                `;
-                el.onclick = () => selectClient(c.id);
-                contactsList.appendChild(el);
-            });
-            if(filtered.length === 0) contactsList.innerHTML = '<div class="small">Nenhum contato encontrado</div>';
-        }
-
-        function selectClient(id) {
-            const client = clients.find(c => c.id === id);
-            if(!client) return;
-            activeClient = client;
-            chatName.textContent = client.name;
-            chatMeta.textContent = `${client.status} • Última: ${client.lastSeen}`;
-            chatAvatar.textContent = client.avatar;
-            infoAvatar.textContent = client.avatar;
-            infoName.textContent = client.name;
-            infoEmail.textContent = client.email;
-
-            // Carrega conversa no centro
-            chatArea.innerHTML = '';
-            client.conv.forEach(m => {
-                const div = document.createElement('div');
-                div.className = 'message ' + (m.who === 'me' ? 'msg-me' : 'msg-other');
-                div.innerHTML = `<div style="font-size:13px">${m.text}</div><div class="small" style="margin-top:6px;text-align:right">${m.time}</div>`;
-                chatArea.appendChild(div);
-            });
-            chatArea.scrollTop = chatArea.scrollHeight;
-
-            // Carrega tickets à direita
-            renderTickets(client.tickets);
-
-            // limpa IA summary prompt
-            iaSummary.textContent = 'Nenhum resumo gerado. Use "Gerar resumo IA" para obter um resumo dos últimos chamados do cliente com o chat aberto.';
-        }
-
-        function renderTickets(tickets){
-            ticketsList.innerHTML = '';
-            tickets.forEach(t => {
-                const el = document.createElement('div');
-                el.className = 'ticket';
-                el.innerHTML = `<div style="font-weight:700">${t.subject}</div><div class="small">${t.date} • ${t.status}</div><div class="small" style="margin-top:6px">${t.snippet}</div>`;
-                ticketsList.appendChild(el);
-            });
-            if(tickets.length===0) ticketsList.innerHTML = '<div class="small">Sem chamados anteriores</div>';
-        }
-
-        // Simula geração de resumo por IA (local). Substituir por chamada real de API IA no futuro.
-        function generateSummary() {
-            if(!activeClient) {
-                iaSummary.textContent = 'Selecione um cliente para gerar o resumo.';
-                return;
-            }
-            const t = activeClient.tickets.slice(0,5);
-            if(t.length===0) {
-                iaSummary.textContent = 'Sem chamados no histórico para resumir.';
-                return;
-            }
-
-            // Heurística simples: agrupar por status e extrair ações recomendadas
-            const byStatus = {};
-            t.forEach(ticket => {
-                if(!byStatus[ticket.status]) byStatus[ticket.status]=[];
-                byStatus[ticket.status].push(ticket);
-            });
-
-            const lines = [];
-            lines.push(`Resumo rápido para ${activeClient.name} (${activeClient.email}):`);
-            lines.push(`- Total de chamados recentes: ${t.length}`);
-            for(const status in byStatus){
-                lines.push(`- ${status}: ${byStatus[status].length} chamado(s) — temas: ${byStatus[status].map(x=>x.subject).join('; ')}`);
-            }
-
-            // Sugestões de ação básicas
-            const suggestions = [];
-            if(byStatus['Aberto'] || byStatus['Em análise']){
-                suggestions.push('Verificar chamados abertos e priorizar resposta em até 24h.');
-            }
-            if(byStatus['Resolvido'] || byStatus['Fechado']){
-                suggestions.push('Confirmar satisfação do cliente para casos resolvidos.');
-            }
-            suggestions.push('Anexar histórico relevante ao chat atual e propor solução conciliatória quando aplicável.');
-
-            lines.push('');
-            lines.push('Ações recomendadas:');
-            suggestions.forEach(s => lines.push('- ' + s));
-
-            // Tom de linguagem resumido (simula IA)
-            lines.push('');
-            lines.push('Resumo (tom conciso):');
-            lines.push(`${activeClient.name} teve problemas com pedidos recentes, incluindo casos de defeito. Atualmente possui ${t.length} chamados recentes; recomenda-se priorizar os abertos e atualizar o cliente no chat.`);
-
-            iaSummary.textContent = lines.join('\n');
-        }
-
-        // Hook UI
-        document.getElementById('generateSummary').onclick = generateSummary;
-        document.getElementById('regenerateSummary').onclick = generateSummary;
-        document.getElementById('sendBtn').onclick = () => {
-            const txt = document.getElementById('messageInput').value.trim();
-            if(!txt || !activeClient) return;
-            // adiciona mensagem localmente
-            activeClient.conv.push({ who:'me', text:txt, time:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) });
-            selectClient(activeClient.id);
-            document.getElementById('messageInput').value = '';
-        };
-        document.getElementById('searchInput').oninput = (e) => renderContacts(e.target.value);
-
-        function openTranscript() {
-            if(!activeClient) return alert('Selecione um cliente primeiro.');
-            // Gera uma página de transcript simples (simulação)
-            const lines = [`Transcript - ${activeClient.name} (${activeClient.email})\n`];
-            activeClient.conv.forEach(m => lines.push(`[${m.time}] ${m.who === 'me' ? 'Atendente' : activeClient.name}: ${m.text}`));
-            const blob = new Blob([lines.join('\n')], {type:'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = `transcript-${activeClient.id}.txt`;
-            document.body.appendChild(a); a.click(); a.remove();
-            URL.revokeObjectURL(url);
-        }
-
-        // Inicializa
-        renderContacts();
-    </script>
+        <!-- Script movido para app.js -->
+        <script src="app.js"></script>
 </body>
 </html>
