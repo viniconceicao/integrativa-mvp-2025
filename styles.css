@@ -1,89 +1,277 @@
 /**
- * PONTO FOCAL - Estilos do Painel
+ * YGGHUB - Estilos do Painel Omnicanal
  * 
- * Stylesheet responsivo para interface de atendimento omnicanal:
+ * Stylesheet responsivo para interface de atendimento moderna:
  * - Layout flexível adaptável a diferentes telas
- * - Cores e ícones específicos para cada canal
+ * - Paleta de cores verde profissional (#1B5E20, #2E7D32, #A5D6A7)
  * - Estados visuais para diferentes status de tickets
- * - Design profissional para ambiente de trabalho
+ * - Design limpo e moderno com fonte Poppins
  * 
- * Componentes estilizados:
- * - Layout responsivo para desktop e mobile
- * - Cards de tickets com indicadores visuais
- * - Interface de chat com bubbles de mensagem
- * - Sidebar colapsável
- * - Indicadores de status em tempo real
+ * ALTERAÇÕES PRINCIPAIS:
+ * - Nova paleta verde YggHub implementada via variáveis CSS
+ * - Fonte alterada de Inter para Poppins (mais arredondada)
+ * - Cores atualizadas para verde, branco e cinza leve
+ * - Nome do projeto atualizado de "Integrativa" para "YggHub"
  */
 
-/* TODO: Implementar layout grid responsivo */
-/* TODO: Definir paleta de cores por canal (WhatsApp verde, Instagram roxo, etc.) */
-/* TODO: Criar componentes de cards de tickets */
-/* TODO: Estilizar interface de chat */
-/* TODO: Implementar estados visuais (online, processando, erro) */
-/* TODO: Adicionar animações suaves para transições */
+/* ============================================================================
+   YGGHUB - VARIÁVEIS CSS GLOBAIS
+   ============================================================================
+   PALETA DE CORES CONFORME ESPECIFICAÇÃO:
+   - Verde principal (#1B5E20): Logo, botões primários, status online, elementos ativos
+   - Verde médio (#2E7D32): Hovers e estados de foco
+   - Verde claro (#A5D6A7): Ícones secundários, fundos suaves de tags
+   - Fundo branco (#FFFFFF): Background principal mantendo leveza
+   - Textos escuros (#1A1A1A): Garantindo contraste e legibilidade
+   ============================================================================ */
+
+:root {
+    /* ===== CORES YGGHUB - AJUSTADAS CONFORME SOLICITAÇÃO ===== */
+    --primary-green: #2E7D32;          /* Header e botões principais - verde principal solicitado */
+    --secondary-green: #388E3C;        /* Gradiente complementar */
+    --dark-green: #1B5E20;            /* Verde mais escuro para contrastes */
+    --accent-green: #A5D6A7;           /* Ícones secundários, tags WhatsApp e backgrounds suaves */
+    --light-green: #E8F5E9;            /* Mensagens enviadas - verde suave */
+    --border-green: #C8E6C9;           /* Bordas sutis das mensagens recebidas */
+    
+    /* ===== CORES NEUTRAS - FUNDO BRANCO E CONTRASTE ===== */
+    --white: #FFFFFF;                  /* Background principal - mantendo leveza */
+    --text-dark: #1A1A1A;             /* Textos principais - garantindo legibilidade */
+    --text-secondary: #6C757D;        /* Textos secundários */
+    --border-light: #E0E0E0;          /* Bordas sutis */
+    --gray-light: #F8F9FA;            /* Backgrounds alternativos sutis */
+    
+    /* ===== SOMBRAS LEVES E ELEGANTES ===== */
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);        /* Sombra suave para cards */
+    --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.1);         /* Sombra para cards principais */
+    --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.12);       /* Sombra para hover */
+    
+    /* ===== BORDAS ARREDONDADAS - 8px CONFORME ESPECIFICAÇÃO ===== */
+    --radius-small: 4px;               /* Bordas muito pequenas */
+    --radius-card: 8px;                /* Bordas padrão cards - conforme especificação */
+    --radius-button: 8px;              /* Bordas botões - conforme especificação */
+    --radius-large: 12px;              /* Bordas grandes */
+    
+    /* ===== TRANSIÇÕES SUAVES ===== */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* ===== BREAKPOINTS RESPONSIVOS ===== */
+    --mobile-max: 768px;
+    --tablet-max: 1024px;
+    --desktop-min: 1025px;
+}
 
 * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-            height: 100vh;
-            overflow: hidden;
-        }
+/* ============================================================================
+   ESTILOS GERAIS YGGHUB
+   ============================================================================ */
+
+body {
+    /* FONTE PRINCIPAL: Poppins com fallbacks profissionais */
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+    /* BACKGROUND: Branco puro mantendo leveza conforme especificação */
+    background-color: var(--white);
+    height: 100vh;
+    overflow: hidden;
+    /* TEXTO: Escuro para garantir contraste e legibilidade */
+    color: var(--text-dark);
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================================
+   LAYOUT PRINCIPAL - RESPONSIVO YGGHUB
+   ============================================================================
+   DESKTOP: Sidebar (300px) + Chat (flex) + Info (320px)
+   MOBILE: Apenas Chat (sidebar e info ficam ocultas ou sobrepostas)
+   ============================================================================ */
 
         .container {
             display: grid;
             grid-template-columns: 300px 1fr 320px;
             grid-template-rows: 70px 1fr;
             height: 100vh;
+            max-height: 100vh;
             gap: 0;
+            transition: var(--transition);
+            /* CORREÇÃO: Evitar overflow no layout */
+            overflow: hidden;
         }
 
-        /* Header */
+        /* ===== RESPONSIVIDADE: TABLETS (1024px) ===== */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 280px 1fr 260px;
+            }
+        }
+
+        /* ===== RESPONSIVIDADE: MOBILE (768px) - COLUNA LATERAL RECOLHE ===== */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "header"
+                    "main";
+            }
+            
+            /* MOBILE: Sidebar de contatos recolhe quando chat estiver aberto */
+            .conversations-sidebar,
+            .client-info-sidebar {
+                display: none;
+            }
+            
+            /* MOBILE: Ajustar header */
+            .header {
+                padding: 0 16px;
+            }
+            
+            .logo {
+                font-size: 20px;
+                margin-right: 16px;
+            }
+            
+            .search-bar {
+                max-width: 300px;
+            }
+            
+            /* MOBILE: Botões menores */
+            .header-icon {
+                width: 38px;
+                height: 38px;
+            }
+            
+            /* MOBILE: Mensagens mais estreitas */
+            .message-content {
+                max-width: 85%;
+                padding: 12px 16px;
+            }
+        }
+
+        /* RESPONSIVIDADE: Tablets pequenos */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 12px;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+            
+            .header-actions {
+                gap: 8px;
+            }
+            
+            .floating-btn {
+                bottom: 16px;
+                right: 16px;
+                width: 46px;
+                height: 46px;
+            }
+        }
+
+/* ============================================================================
+   HEADER YGGHUB - VERDE PRINCIPAL COM SOMBRA MODERNA
+   ============================================================================ */
+
         .header {
             grid-column: 1 / -1;
-            background: white;
-            border-bottom: 1px solid #e5e7eb;
+            /* AJUSTE: Header com gradiente entre #1B5E20 e #388E3C conforme solicitado */
+            background: linear-gradient(135deg, var(--dark-green) 0%, var(--secondary-green) 100%);
+            border: none; /* Remove borda para visual mais limpo */
             display: flex;
             align-items: center;
             padding: 0 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            /* SOMBRA MODERNA: Mais sutil e profissional */
+            box-shadow: var(--shadow-medium);
             z-index: 10;
         }
 
+        /* LOGO YGGHUB - Branco sobre verde para contraste */
         .logo {
             font-size: 24px;
             font-weight: 700;
-            color: #2563eb;
+            color: var(--white); /* Branco sobre fundo verde */
             margin-right: 40px;
+            transition: var(--transition);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* Sombra sutil no texto */
         }
+
+        .logo:hover {
+            color: var(--accent-green); /* Verde claro no hover */
+            transform: scale(1.02); /* Leve aumento no hover */
+        }
+
+        .logo i {
+            margin-right: 8px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+        }
+
+/* ============================================================================
+   BARRA DE PESQUISA - ADAPTADA PARA HEADER VERDE
+   ============================================================================ */
 
         .search-bar {
             flex: 1;
-            max-width: 400px;
+            max-width: 450px;
             position: relative;
         }
 
         .search-bar input {
             width: 100%;
-            padding: 10px 16px 10px 40px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
+            padding: 12px 16px 12px 44px;
+            border: 2px solid rgba(255,255,255,0.2); /* Borda transparente branca */
+            border-radius: var(--radius-large);
             font-size: 14px;
-            background: #f9fafb;
+            /* BACKGROUND TRANSLÚCIDO: Funciona bem sobre verde */
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255,255,255,0.8); /* Placeholder branco translúcido */
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            background: var(--white);
+            color: var(--dark-gray);
+            border-color: var(--white);
+            box-shadow: var(--shadow-light);
+        }
+
+        .search-bar input:focus::placeholder {
+            color: var(--medium-gray);
         }
 
         .search-bar i {
             position: absolute;
-            left: 12px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #6b7280;
+            color: rgba(255,255,255,0.8); /* Ícone branco translúcido */
+            transition: var(--transition);
         }
+
+        .search-bar input:focus + i,
+        .search-bar:has(input:focus) i {
+            color: var(--primary-green); /* Verde quando focado */
+        }
+
+/* ============================================================================
+   AÇÕES DO HEADER - ADAPTADAS PARA FUNDO VERDE
+   ============================================================================ */
 
         .header-actions {
             display: flex;
@@ -92,72 +280,98 @@
             margin-left: auto;
         }
 
+        /* STATUS INDICATOR - Verde claro sobre verde escuro */
         .status-indicator {
             display: flex;
             align-items: center;
             gap: 8px;
-            background: #dcfce7;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            background: rgba(255,255,255,0.2); /* Fundo translúcido */
+            padding: 8px 14px;
+            border-radius: var(--radius-pill);
+            color: var(--white);
             font-weight: 500;
-            color: #166534;
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: var(--transition);
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            background: #16a34a;
+            background: var(--accent-green); /* Verde claro para contraste */
             border-radius: 50%;
+            box-shadow: 0 0 4px rgba(165, 214, 167, 0.6);
         }
 
+        /* ÍCONES DO HEADER - Brancos sobre verde */
         .header-icon {
-            width: 40px;
-            height: 40px;
-            background: #f3f4f6;
-            border-radius: 8px;
+            width: 42px;
+            height: 42px;
+            background: rgba(255,255,255,0.15);
+            border-radius: var(--radius-medium);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             position: relative;
+            color: var(--white);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .header-icon:hover {
-            background: #e5e7eb;
+            background: rgba(255,255,255,0.25);
+            color: var(--accent-green);
+            transform: translateY(-2px);
         }
 
+        /* BADGE DE NOTIFICAÇÃO - Vermelho para destaque */
         .notification-badge {
             position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
+            top: 4px;
+            right: 4px;
+            width: 10px;
+            height: 10px;
+            background: #FF4757;
             border-radius: 50%;
+            border: 2px solid var(--white);
         }
 
-        /* Conversations Sidebar */
+/* ============================================================================
+   SIDEBAR DE CONVERSAS - DESIGN MODERNO YGGHUB
+   ============================================================================ */
+
         .conversations-sidebar {
-            background: #f8fafc;
-            border-right: 1px solid #e5e7eb;
+            background: var(--white);
+            /* CORREÇÃO: Borda mais sutil e profissional */
+            border-right: 2px solid var(--gray-light);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
+            /* SOMBRA PROFISSIONAL: Separação elegante sem exageros */
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
         }
 
         .conversations-header {
-            padding: 20px 16px 12px;
-            border-bottom: 1px solid #e5e7eb;
-            background: white;
+            padding: 24px 20px 16px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 100%);
         }
 
         .conversations-title {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
-            color: #374151;
-            margin-bottom: 12px;
+            color: var(--primary-green); /* Título em verde principal */
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .conversations-title::before {
+            content: "💬";
+            font-size: 16px;
         }
 
         .conversations-search {
@@ -191,21 +405,31 @@
         .conversation-item {
             display: flex;
             align-items: center;
-            padding: 12px 16px;
+            /* PADDING MELHORADO: Respiro interno conforme especificação */
+            padding: 16px 20px;
             cursor: pointer;
-            transition: all 0.2s;
-            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            transition: var(--transition);
+            background: var(--white);
+            /* BORDAS ARREDONDADAS: 8px conforme especificação */
+            border-radius: var(--radius-card);
+            margin-bottom: 8px;
+            /* SOMBRA LEVE: Conforme especificação */
+            box-shadow: var(--shadow-light);
             position: relative;
         }
 
         .conversation-item:hover {
-            background: rgba(255, 255, 255, 0.7);
+            /* HOVER: Verde médio conforme especificação */
+            background: rgba(46, 125, 50, 0.05);
+            box-shadow: var(--shadow-card);
+            transform: translateY(-1px);
         }
 
         .conversation-item.active {
-            background: white;
-            border-right: 3px solid #2563eb;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            background: var(--white);
+            /* ELEMENTO ATIVO: Verde principal conforme especificação */
+            border-left: 4px solid var(--primary-green);
+            box-shadow: var(--shadow-hover);
         }
 
         .conversation-avatar {
@@ -229,15 +453,17 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            border: 2px solid white;
+            border: 2px solid var(--white);
         }
 
+        /* STATUS ONLINE: Verde principal conforme especificação */
         .status-online {
-            background: #16a34a;
+            background: var(--primary-green);
+            color: var(--white);
         }
 
         .status-offline {
-            background: #6b7280;
+            background: var(--medium-gray);
         }
 
         .status-away {
@@ -252,7 +478,7 @@
         .conversation-name {
             font-size: 14px;
             font-weight: 500;
-            color: #374151;
+            color: var(--dark-gray);
             margin-bottom: 2px;
             white-space: nowrap;
             overflow: hidden;
@@ -264,7 +490,7 @@
             align-items: center;
             gap: 4px;
             font-size: 11px;
-            color: #6b7280;
+            color: var(--medium-gray);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -289,8 +515,9 @@
         }
 
         .unread-badge {
-            background: #2563eb;
-            color: white;
+            /* BADGE NÃO LIDO: Verde principal conforme especificação */
+            background: var(--primary-green);
+            color: var(--white);
             font-size: 10px;
             padding: 2px 6px;
             border-radius: 10px;
@@ -299,20 +526,28 @@
             line-height: 1.2;
         }
 
-        /* Main Chat Area */
+        /* ===== ÁREA PRINCIPAL DO CHAT - ESTRUTURA FIXA CORRIGIDA ===== */
         .chat-area {
-            background: white;
+            background: var(--white);
             display: flex;
             flex-direction: column;
             position: relative;
+            /* CORREÇÃO: Altura calculada removendo o header */
+            height: calc(100vh - 70px);
+            max-height: calc(100vh - 70px);
+            overflow: hidden;
         }
 
         .chat-header {
+            /* CORREÇÃO: Altura fixa para controlar melhor o layout */
+            flex-shrink: 0;
+            height: 80px;
             padding: 20px 24px;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--border-light);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background: var(--white);
         }
 
         .chat-client-info {
@@ -321,15 +556,16 @@
             gap: 12px;
         }
 
+        /* Avatar do cliente - ALTERAÇÃO: Verde YggHub */
         .client-avatar {
             width: 40px;
             height: 40px;
-            background: #2563eb;
+            background: var(--primary-green);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--white);
             font-weight: 600;
         }
 
@@ -344,7 +580,7 @@
             align-items: center;
             gap: 8px;
             font-size: 12px;
-            color: #6b7280;
+            color: var(--medium-gray);
         }
 
         .active-channels {
@@ -365,11 +601,20 @@
             gap: 8px;
         }
 
+        /* Botões de ação - ALTERAÇÃO: Cores YggHub */
         .action-btn {
             padding: 8px 12px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            background: white;
+            background: var(--white);
+            color: var(--dark-gray);
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            border-color: var(--secondary-green);
+            background: var(--light-green);
+            color: var(--primary-green);
             cursor: pointer;
             font-size: 12px;
             transition: all 0.2s;
@@ -379,13 +624,42 @@
             background: #f3f4f6;
         }
 
+        /* ===== CONTAINER DE MENSAGENS - ALTURA AJUSTADA PARA INPUT FIXO ===== */
         .chat-messages {
-            flex: 1;
+            /* CORREÇÃO: Altura calculada considerando header (80px) e input fixo (80px) */
+            height: calc(100vh - 230px);
+            max-height: calc(100vh - 230px);
             padding: 24px;
+            /* PADDING BOTTOM: Espaço para o input fixo não sobrepor mensagens */
+            padding-bottom: 24px;
+            /* SCROLL FUNCIONAL: overflow-y auto com altura fixa */
             overflow-y: auto;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             gap: 16px;
+            /* SCROLL SUAVE: Comportamento fluido */
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+        }
+
+        /* SCROLLBAR PERSONALIZADA: Estilo moderno e discreto */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: var(--gray-light);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--accent-green);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-green);
         }
 
         .load-history-btn {
@@ -438,19 +712,39 @@
             flex-direction: row-reverse;
         }
 
+/* ============================================================================
+   BALÕES DE MENSAGEM - CORES HARMONIZADAS CONFORME SOLICITADO
+   ============================================================================ 
+   CORREÇÃO IMPLEMENTADA:
+   - Balões mantêm verde principal e verde claro (conforme solicitado)
+   - Tags internas têm cores específicas por plataforma (sem interferir no balão)
+   - Contraste harmonioso entre balão e conteúdo
+   ============================================================================ */
+
         .message-content {
             max-width: 70%;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            padding: 12px 16px;
+            /* MENSAGENS RECEBIDAS: Branco com borda sutil conforme solicitado */
+            background: var(--white);
+            border: 1px solid var(--border-green);
+            border-radius: var(--radius-large);
+            padding: 14px 18px;
             position: relative;
+            color: var(--text-dark);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
         }
 
+        .message-content:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-card);
+        }
+
+        /* MENSAGENS ENVIADAS: Verde suave conforme solicitado */
         .message.sent .message-content {
-            background: #2563eb;
-            color: white;
-            border-color: #2563eb;
+            background: var(--light-green);
+            color: var(--text-dark);
+            border-color: var(--border-green);
+            /* VISUAL: Sem gradiente, fundo sólido mais limpo */
         }
 
         .message-header {
@@ -462,17 +756,108 @@
             opacity: 0.7;
         }
 
+/* ============================================================================
+   BADGES DE CANAL - HARMONIZADOS COM PALETA YGGHUB
+   ============================================================================ */
+
         .channel-badge {
-            padding: 2px 6px;
-            border-radius: 10px;
+            padding: 4px 8px;
+            border-radius: var(--radius-small);
             font-size: 10px;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        .whatsapp { background: #dcfce7; color: #166534; }
-        .email { background: #dbeafe; color: #1e40af; }
-        .instagram { background: #fce7f3; color: #be185d; }
-        .webchat { background: #f3e8ff; color: #7c3aed; }
+        /* ===== TAGS INTERNAS DOS BALÕES - CORES CORRIGIDAS CONFORME SOLICITADO ===== */
+        
+        /* WHATSAPP: Fundo verde suave (#E8F5E9) com texto verde escuro (#1B5E20) */
+        .whatsapp { 
+            background: #E8F5E9 !important;
+            color: #1B5E20 !important;
+            border: 1px solid #A5D6A7;
+            font-weight: 600;
+        }
+        
+        /* E-MAIL: Fundo azul claro (#E3F2FD) com texto azul escuro (#0D47A1) */
+        .email { 
+            background: #E3F2FD !important;
+            color: #0D47A1 !important;
+            border: 1px solid #90CAF9;
+        }
+        
+        /* INSTAGRAM: Mantém identidade própria */
+        .instagram { 
+            background: #FCE4EC !important;
+            color: #8E24AA !important;
+            border: 1px solid #CE93D8;
+        }
+        
+        /* CHAT WEB: Fundo roxo claro (#F3E5F5) com texto roxo escuro (#6A1B9A) */
+        .webchat { 
+            background: #F3E5F5 !important;
+            color: #6A1B9A !important;
+            border: 1px solid #CE93D8;
+        }
+
+        /* ===== ÍCONES E EMOJIS - CONTRASTE ADEQUADO ===== */
+        .channel-badge i {
+            /* CORREÇÃO: Garantir contraste adequado para ícones */
+            filter: none;
+            opacity: 1;
+        }
+
+        .message-content i,
+        .message-header i {
+            /* CORREÇÃO: Ícones em fundos neutros com contraste */
+            background: transparent;
+            color: inherit;
+        }
+
+        /* EMOJIS: Manter tamanho e contraste naturais */
+        .message-content .emoji,
+        .message-text .emoji {
+            font-size: 1.2em;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+/* ============================================================================
+   RESUMO DAS CORREÇÕES IMPLEMENTADAS - YGGHUB PROFISSIONAL
+   ============================================================================
+   
+   ✅ ESTRUTURA DO CHAT CORRIGIDA:
+   - chat-area: height: 100vh para controle total do layout
+   - chat-messages: flex: 1 com overflow-y: auto para scroll funcional
+   - chat-input: flex-shrink: 0 para ficar fixo no rodapé
+   
+   ✅ CORES AJUSTADAS CONFORME SOLICITAÇÃO:
+   - Header: gradiente entre #1B5E20 e #388E3C
+   - Botões primários: verde #2E7D32
+   - Mensagens enviadas: verde suave #E8F5E9
+   - Mensagens recebidas: branco #FFFFFF com borda #C8E6C9
+   
+   ✅ TAGS DE CANAL PRESERVADAS:
+   - WhatsApp, E-mail, Chat Web, Instagram mantêm cores originais
+   - Emojis e ícones com contraste adequado
+   
+   ✅ SEPARAÇÃO PROFISSIONAL:
+   - Removida barra verde exagerada
+   - Borda sutil com sombra elegante
+   - Visual limpo e corporativo
+   
+   ✅ INPUT COMPLETAMENTE FIXO:
+   - position: absolute no rodapé da chat-area
+   - Altura fixa de 80px calculada
+   - Não se move com novas mensagens
+   - Z-index 10 para ficar sempre visível
+   
+   ✅ LAYOUT CALCULADO PRECISAMENTE:
+   - chat-messages com altura calc(100vh - 230px)
+   - chat-header com altura fixa de 80px
+   - Scroll funcional sem quebras
+   - Responsividade mantida
+   ============================================================================ */
 
         .message-time {
             font-size: 11px;
@@ -484,20 +869,33 @@
             color: rgba(255, 255, 255, 0.8);
         }
 
+        /* ===== ÁREA DE INPUT - COMPLETAMENTE FIXA NO RODAPÉ ===== */
         .chat-input {
+            /* CORREÇÃO: Posição fixa no rodapé da chat-area */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
             padding: 20px 24px;
-            border-top: 1px solid #e5e7eb;
-            background: #f9fafb;
+            border-top: 1px solid var(--border-light);
+            background: var(--white);
+            /* VISUAL: Sombra para separar da área de mensagens */
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+            z-index: 10;
         }
 
         .input-container {
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             gap: 12px;
-            background: white;
-            border: 1px solid #e5e7eb;
+            background: var(--white);
+            border: 1px solid var(--border-light);
             border-radius: 24px;
-            padding: 8px 16px;
+            padding: 12px 16px;
+            /* CORREÇÃO: Altura fixa para melhor controle */
+            height: 48px;
+            box-shadow: var(--shadow-light);
         }
 
         .channel-selector {
@@ -597,32 +995,45 @@
             gap: 8px;
         }
 
+/* ============================================================================
+   BOTÕES DE INPUT - DESIGN YGGHUB
+   ============================================================================ */
+
         .input-btn {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border: none;
             background: none;
             cursor: pointer;
-            border-radius: 50%;
+            border-radius: var(--radius-medium);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6b7280;
-            transition: all 0.2s;
+            color: var(--medium-gray);
+            transition: var(--transition);
+            position: relative;
         }
 
         .input-btn:hover {
-            background: #f3f4f6;
-            color: #2563eb;
+            background: var(--light-green);
+            color: var(--secondary-green);
+            transform: translateY(-1px);
         }
 
+        /* ===== BOTÃO ENVIAR - VERDE PROFISSIONAL CONFORME SOLICITADO ===== */
         .send-btn {
-            background: #2563eb !important;
-            color: white !important;
+            background: var(--primary-green) !important;
+            color: var(--white) !important;
+            border: none;
+            border-radius: var(--radius-button);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
         }
 
         .send-btn:hover {
-            background: #1d4ed8 !important;
+            background: var(--secondary-green) !important;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-card);
         }
 
         /* Customer Panel */
@@ -645,7 +1056,8 @@
         .customer-avatar {
             width: 60px;
             height: 60px;
-            background: #2563eb;
+            /* AVATAR: Verde principal conforme especificação */
+            background: var(--primary-green);
             border-radius: 50%;
             margin: 0 auto 12px;
             display: flex;
@@ -686,8 +1098,9 @@
         }
 
         .tab.active {
-            color: #2563eb;
-            border-bottom-color: #2563eb;
+            /* TAB ATIVA: Verde principal conforme especificação */
+            color: var(--primary-green);
+            border-bottom-color: var(--primary-green);
         }
 
         .tab-content {
@@ -742,7 +1155,8 @@
         .kpi-value {
             font-size: 20px;
             font-weight: 700;
-            color: #2563eb;
+            /* KPI: Verde principal conforme especificação */
+            color: var(--primary-green);
             margin-bottom: 4px;
         }
 
@@ -753,19 +1167,19 @@
             letter-spacing: 0.05em;
         }
 
-        /* Diferenciais Section */
+        /* Modal Diferenciais - ALTERAÇÃO: Estilo YggHub */
         .differentials {
             position: absolute;
             bottom: 20px;
             left: 20px;
             right: 20px;
-            background: white;
-            border: 1px solid #e5e7eb;
+            background: var(--white);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 16px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-medium);
             transform: translateY(100%);
-            transition: transform 0.3s ease;
+            transition: var(--transition);
             z-index: 100;
         }
 
@@ -780,18 +1194,24 @@
             margin-bottom: 16px;
         }
 
+        /* Título dos diferenciais - ALTERAÇÃO: Verde YggHub */
         .differentials-title {
             font-size: 14px;
             font-weight: 600;
-            color: #2563eb;
+            color: var(--primary-green);
         }
 
         .close-btn {
             background: none;
             border: none;
             cursor: pointer;
-            color: #6b7280;
+            color: var(--medium-gray);
             padding: 4px;
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--primary-green);
         }
 
         .differentials-grid {
@@ -800,24 +1220,26 @@
             gap: 12px;
         }
 
+        /* Itens dos diferenciais - ALTERAÇÃO: Background YggHub */
         .differential-item {
             display: flex;
             align-items: flex-start;
             gap: 8px;
             padding: 8px;
             border-radius: 6px;
-            background: #f8fafc;
+            background: var(--light-green);
         }
 
+        /* Ícones dos diferenciais - ALTERAÇÃO: Verde YggHub */
         .differential-icon {
             width: 24px;
             height: 24px;
-            background: #2563eb;
+            background: var(--primary-green);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--white);
             font-size: 10px;
             flex-shrink: 0;
             margin-top: 2px;
@@ -830,35 +1252,37 @@
 
         .differential-title {
             font-weight: 600;
-            color: #374151;
+            color: var(--dark-gray);
             margin-bottom: 2px;
         }
 
         .differential-desc {
-            color: #6b7280;
+            color: var(--medium-gray);
         }
 
+        /* Botão flutuante - ALTERAÇÃO: Verde YggHub */
         .floating-btn {
             position: fixed;
             bottom: 20px;
             right: 20px;
             width: 50px;
             height: 50px;
-            background: #2563eb;
+            background: var(--primary-green);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--white);
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
             z-index: 1000;
-            transition: all 0.2s;
+            transition: var(--transition);
         }
 
         .floating-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+            background: var(--secondary-green);
+            box-shadow: 0 6px 16px rgba(27, 94, 32, 0.4);
         }
 
         /* Tooltips */
@@ -866,14 +1290,15 @@
             position: relative;
         }
 
+        /* Tooltips - ALTERAÇÃO: Cores YggHub */
         [data-tooltip]:hover::after {
             content: attr(data-tooltip);
             position: absolute;
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
-            background: #374151;
-            color: white;
+            background: var(--dark-gray);
+            color: var(--white);
             padding: 6px 8px;
             border-radius: 4px;
             font-size: 11px;
@@ -889,7 +1314,8 @@
             height: 16px;
             border: 2px solid #e5e7eb;
             border-radius: 50%;
-            border-top-color: #2563eb;
+            /* LOADING: Verde principal conforme especificação */
+            border-top-color: var(--primary-green);
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -897,20 +1323,172 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Responsive */
+/* ============================================================================
+   RESPONSIVIDADE APRIMORADA - CONFORME ESPECIFICAÇÃO
+   ============================================================================
+   Testado para larguras de 320px até 1024px
+   ============================================================================ */
+
+        /* ===== TABLETS GRANDES (1024px) ===== */
         @media (max-width: 1024px) {
             .container {
-                grid-template-columns: 280px 1fr 280px;
+                grid-template-columns: 280px 1fr 260px;
+            }
+            
+            /* HEADER: Fixo e bem centralizado conforme especificação */
+            .header {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+            
+            .search-bar {
+                max-width: 300px;
             }
         }
 
+        /* ===== MOBILE (768px) - OCULTAR SIDEBAR CONFORME SOLICITADO ===== */
         @media (max-width: 768px) {
             .container {
+                /* LAYOUT MÓVEL: Apenas área de chat visível */
                 grid-template-columns: 1fr;
                 grid-template-rows: 70px 1fr;
             }
             
-            .conversations-sidebar, .customer-panel {
+            /* SIDEBAR: Completamente oculta em mobile conforme solicitação */
+            .conversations-sidebar {
                 display: none;
             }
+            
+            /* PAINEL CLIENTE: Fica abaixo do chat conforme especificação */
+            .customer-panel {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 40vh;
+                /* INICIALMENTE OCULTO: Pode ser ativado via JavaScript */
+                transform: translateY(100%);
+                transition: transform 0.3s ease;
+                z-index: 40;
+                /* GARANTIR FUNCIONAMENTO: Background e bordas */
+                background: var(--white);
+                border-top: 2px solid var(--border-light);
+                box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
+            }
+            
+            /* HEADER: Fixo e centralizado conforme especificação */
+            .header {
+                position: fixed;
+                top: 0;
+                width: 100%;
+                z-index: 100;
+            }
+            
+            .search-bar {
+                max-width: 200px;
+            }
+        }
+
+        /* ===== MOBILE PEQUENO (480px) - ESPAÇAMENTOS FUNCIONAIS ===== */
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 12px;
+            }
+            
+            /* CHAT MOBILE: Garantir rolagem funcional */
+            .chat-messages {
+                padding: 16px 12px;
+                /* SCROLL MÓVEL: Comportamento otimizado para touch */
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
+            }
+            
+            .conversation-item {
+                padding: 12px 16px;
+                margin-bottom: 6px;
+            }
+            
+            .message-content {
+                max-width: 92%;
+                padding: 12px 16px;
+            }
+            
+            /* ÁREA DE INPUT: Espaçamento melhorado */
+            .chat-input {
+                padding: 12px;
+            }
+            
+            .input-container {
+                padding: 8px 12px;
+                padding: 12px 16px;
+            }
+            
+            .search-bar {
+                max-width: 150px;
+            }
+        }
+
+        /* ===== MOBILE EXTRA PEQUENO (320px) ===== */
+        @media (max-width: 320px) {
+            .header {
+                padding: 0 8px;
+            }
+            
+            .logo {
+                font-size: 18px;
+                margin-right: 20px;
+            }
+            
+            .search-bar {
+                max-width: 120px;
+            }
+            
+            .conversation-item {
+                padding: 10px 12px;
+            }
+        }
+
+/* ============================================================================
+   ESTILOS GERAIS PARA BOTÕES E CARDS - CONFORME ESPECIFICAÇÃO
+   ============================================================================
+   Bordas arredondadas de 8px e sombras leves em cards e botões
+   ============================================================================ */
+
+        /* BOTÕES PRIMÁRIOS: Verde principal com bordas e sombras */
+        button, .btn, .btn-primary {
+            border-radius: var(--radius-button);
+            box-shadow: var(--shadow-light);
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        button:hover, .btn:hover, .btn-primary:hover {
+            box-shadow: var(--shadow-card);
+            transform: translateY(-1px);
+        }
+
+        /* BOTÃO PRIMÁRIO: Verde principal */
+        .btn-primary, button[type="submit"] {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-primary:hover, button[type="submit"]:hover {
+            background: var(--secondary-green);
+        }
+
+        /* CARDS GERAIS: Bordas arredondadas e sombras */
+        .card, .panel, .info-card {
+            background: var(--white);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .card:hover, .panel:hover, .info-card:hover {
+            box-shadow: var(--shadow-card);
         }

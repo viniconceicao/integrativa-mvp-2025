@@ -24,9 +24,10 @@
 // TODO: Criar interface de chat responsiva
 // TODO: Implementar gerenciamento de estado local
      
-     // Variable to track selected channel for sending messages
+     // ===== VARIÁVEIS GLOBAIS =====
         let selectedChannel = 'whatsapp';
         let currentClient = 'maria-silva';
+        let isUserScrolling = false; // Controle do scroll automático
         
         const channelConfig = {
             whatsapp: { name: 'WhatsApp', icon: 'fab fa-whatsapp', class: 'whatsapp' },
@@ -152,6 +153,84 @@
             });
         });
 
+        /* ===================================================================
+           CORREÇÃO 1: CONTROLE DE SCROLL INTELIGENTE DO CHAT
+           ===================================================================
+           PROBLEMA CORRIGIDO: Chat descia automaticamente a cada nova mensagem
+           
+           SOLUÇÃO IMPLEMENTADA:
+           - Detecta se usuário está próximo do final (tolerância de 100px)
+           - Só rola automaticamente se usuário estiver no final
+           - Scroll suave com behavior: 'smooth'
+           - Debounce para evitar verificações excessivas
+           =================================================================== */
+
+        // Inicializar controle de scroll quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeChatScroll();
+        });
+
+        function initializeChatScroll() {
+            const chatMessages = document.querySelector('.chat-messages');
+            if (!chatMessages) return;
+
+            // CORREÇÃO: Detectar posição do scroll com mais precisão
+            let scrollTimer;
+            chatMessages.addEventListener('scroll', function() {
+                const { scrollTop, scrollHeight, clientHeight } = chatMessages;
+                // MELHORIA: Usuário está próximo do final (tolerância de 100px)
+                const isNearBottom = (scrollTop + clientHeight >= scrollHeight - 100);
+                isUserScrolling = !isNearBottom;
+                
+                // DEBOUNCE: Evitar muitas verificações durante scroll rápido
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(() => {
+                    // Após parar de rolar, verificar posição novamente
+                    const finalCheck = chatMessages.scrollTop + chatMessages.clientHeight >= chatMessages.scrollHeight - 50;
+                    isUserScrolling = !finalCheck;
+                }, 150);
+            });
+
+            // Observar mudanças no DOM para detectar novas mensagens
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        // Nova mensagem adicionada, rolar apenas se usuário estava no final
+                        scrollToBottomIfNeeded();
+                    }
+                });
+            });
+
+            observer.observe(chatMessages, {
+                childList: true,
+                subtree: true
+            });
+        }
+
+        // CORREÇÃO: Scroll suave apenas quando necessário
+        function scrollToBottomIfNeeded() {
+            const chatMessages = document.querySelector('.chat-messages');
+            if (!chatMessages) return;
+            
+            // MELHORIA: Só rola se usuário estiver próximo do final (não navegando histórico)
+            if (!isUserScrolling) {
+                // SCROLL SUAVE: Comportamento mais natural
+                chatMessages.scrollTo({
+                    top: chatMessages.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Função para forçar rolagem (usada em mudança de cliente)
+        function scrollToBottom() {
+            const chatMessages = document.querySelector('.chat-messages');
+            if (!chatMessages) return;
+            
+            isUserScrolling = false;
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
         // Switch to client function
         function switchToClient(clientId) {
             currentClient = clientId;
@@ -242,6 +321,9 @@
                 `;
                 chatMessages.appendChild(messageDiv);
             });
+            
+            // SCROLL INTELIGENTE: Forçar rolagem ao trocar de cliente
+            setTimeout(() => scrollToBottom(), 100);
         }
 
         // Get sample messages for different clients
@@ -351,8 +433,8 @@
                 // Update conversation preview in sidebar
                 updateConversationPreview(currentClient, message, selectedChannel);
                 
-                // Auto scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                // SCROLL INTELIGENTE: Nova mensagem sempre rola para baixo
+                scrollToBottomIfNeeded();
                 
                 // Simulate customer response in different channel sometimes
                 setTimeout(() => {
@@ -483,11 +565,8 @@
             }
         });
 
-        // Toggle differentials popup
-        function toggleDifferentials() {
-            const differentials = document.getElementById('differentials');
-            differentials.classList.toggle('show');
-        }
+        // ===== MODAL DIFERENCIAIS REMOVIDO CONFORME SOLICITADO =====
+        // Função removida: toggleDifferentials() não é mais necessária
 
         // Search functionality
         document.querySelector('.search-bar input').addEventListener('input', function(e) {
@@ -516,15 +595,13 @@
             });
         });
 
-        // Initialize tooltips and auto-show differentials
+        // ===== INICIALIZAÇÃO DA APLICAÇÃO =====
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize with Maria Silva (first client)
             switchToClient('maria-silva');
             
-            // Auto-show differentials after 3 seconds for demo
-            setTimeout(() => {
-                toggleDifferentials();
-            }, 3000);
+            // MODAL REMOVIDO: Não há mais pop-up automático de diferenciais
+            console.log('YggHub inicializado com sucesso - Modal de diferenciais removido');
         });
 
         // Simulate real-time updates

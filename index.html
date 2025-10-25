@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrativa - Painel Omnicanal</title>
+    <!-- ALTERAÇÃO: Título atualizado para YggHub -->
+    <title>YggHub - Painel Omnicanal</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ALTERAÇÃO: Fonte alterada de Inter para Poppins (mais arredondada) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
         <!-- 
-    PONTO FOCAL - Painel Principal do Atendente
+    YGGHUB - Painel Principal do Atendente
     
     Interface web responsiva para gerenciamento de atendimento omnicanal:
     - Lista de tickets organizados por canal e prioridade
@@ -19,21 +21,19 @@
     - Painel de informações do cliente
     - Indicadores visuais de status (IA processando, aguardando, etc.)
     - Notificações em tempo real de novos tickets
-    -->
     
-    <!-- TODO: Implementar header com informações do atendente -->
-    <!-- TODO: Criar sidebar com lista de tickets filtráveis -->
-    <!-- TODO: Implementar área central do chat -->
-    <!-- TODO: Adicionar painel de informações do cliente -->
-    <!-- TODO: Implementar indicadores visuais de status -->
-    <!-- TODO: Adicionar notificações em tempo real -->
+    ALTERAÇÕES VISUAIS YGGHUB:
+    - Nova paleta de cores verde (#1B5E20, #2E7D32, #A5D6A7)
+    - Fonte Poppins para design mais moderno e arredondado
+    - Interface limpa com predominância de verde, branco e cinza leve
+    -->
 
 
     <div class="container">
-        <!-- Header -->
+        <!-- Header - ALTERAÇÃO: Nome atualizado para YggHub -->
         <header class="header">
             <div class="logo">
-                <i class="fas fa-comments"></i> Integrativa
+                <i class="fas fa-comments"></i> YggHub
             </div>
             
             <div class="search-bar">
@@ -476,74 +476,7 @@ Decisor: Própria cliente</textarea>
         </aside>
     </div>
 
-    <!-- Diferenciais Popup -->
-    <div class="differentials" id="differentials">
-        <div class="differentials-header">
-            <div class="differentials-title">
-                <i class="fas fa-star"></i> Diferenciais da Integrativa
-            </div>
-            <button class="close-btn" onclick="toggleDifferentials()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        
-        <div class="differentials-grid">
-            <div class="differential-item">
-                <div class="differential-icon">
-                    <i class="fas fa-link"></i>
-                </div>
-                <div class="differential-text">
-                    <div class="differential-title">Histórico Unificado</div>
-                    <div class="differential-desc">Todas as interações em um único painel</div>
-                </div>
-            </div>
-            
-            <div class="differential-item">
-                <div class="differential-icon">
-                    <i class="fas fa-handshake"></i>
-                </div>
-                <div class="differential-text">
-                    <div class="differential-title">Continuidade</div>
-                    <div class="differential-desc">Contexto completo para o próximo atendente</div>
-                </div>
-            </div>
-            
-            <div class="differential-item">
-                <div class="differential-icon">
-                    <i class="fas fa-route"></i>
-                </div>
-                <div class="differential-text">
-                    <div class="differential-title">Roteamento Inteligente</div>
-                    <div class="differential-desc">Distribuição automática por perfil</div>
-                </div>
-            </div>
-            
-            <div class="differential-item">
-                <div class="differential-icon">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <div class="differential-text">
-                    <div class="differential-title">Visão 360º</div>
-                    <div class="differential-desc">Dados completos de múltiplos canais</div>
-                </div>
-            </div>
-            
-            <div class="differential-item">
-                <div class="differential-icon">
-                    <i class="fas fa-sync"></i>
-                </div>
-                <div class="differential-text">
-                    <div class="differential-title">Integração Omnichat</div>
-                    <div class="differential-desc">Sincronização em tempo real</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Floating Action Button -->
-    <div class="floating-btn" onclick="toggleDifferentials()" data-tooltip="Ver Diferenciais">
-        <i class="fas fa-star"></i>
-    </div>
+    <!-- MODAL REMOVIDO: Conforme solicitado, removido o pop-up de Diferenciais -->
 
         <script src="script.js"></script>
 </body>
