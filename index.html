@@ -476,6 +476,106 @@ Decisor: Própria cliente</textarea>
         </aside>
     </div>
 
+    <!-- NAVEGAÇÃO MOBILE - ESTILO WHATSAPP -->
+    <div class="mobile-navigation">
+        <!-- TELA 1: Lista de Conversas -->
+        <div class="mobile-screen" id="mobile-conversations" data-screen="conversations">
+            <div class="mobile-header">
+                <h2>YggHub</h2>
+                <div class="mobile-header-actions">
+                    <button class="mobile-search-btn"><i class="fas fa-search"></i></button>
+                    <button class="mobile-menu-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+            </div>
+            <div class="mobile-search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar conversas...">
+            </div>
+            <div class="mobile-conversations-list">
+                <!-- Lista será populada via JavaScript -->
+            </div>
+        </div>
+
+        <!-- TELA 2: Chat -->
+        <div class="mobile-screen" id="mobile-chat" data-screen="chat" style="display: none;">
+            <div class="mobile-chat-header">
+                <button class="mobile-back-btn"><i class="fas fa-arrow-left"></i></button>
+                <div class="mobile-chat-info">
+                    <span class="mobile-contact-name">João Silva</span>
+                    <span class="mobile-contact-status">Online agora</span>
+                </div>
+                <button class="mobile-info-btn"><i class="fas fa-info-circle"></i></button>
+            </div>
+            <div class="mobile-chat-messages">
+                <!-- Mensagens serão populadas via JavaScript -->
+            </div>
+            <div class="mobile-chat-input">
+                <div class="mobile-input-row">
+                    <div class="mobile-channel-selector" id="mobile-channel-btn">
+                        <i class="mobile-channel-icon fab fa-whatsapp" style="color: #25d366;"></i>
+                        <div class="mobile-channel-dropdown" id="mobile-channel-dropdown">
+                            <div class="mobile-channel-option active" data-channel="whatsapp">
+                                <i class="fab fa-whatsapp" style="color: #25d366;"></i>
+                                <span class="name">WhatsApp</span>
+                            </div>
+                            <div class="mobile-channel-option" data-channel="email">
+                                <i class="fas fa-envelope" style="color: #3b82f6;"></i>
+                                <span class="name">E-mail</span>
+                            </div>
+                            <div class="mobile-channel-option" data-channel="webchat">
+                                <i class="fas fa-comments" style="color: #7c3aed;"></i>
+                                <span class="name">Chat Web</span>
+                            </div>
+                            <div class="mobile-channel-option" data-channel="instagram">
+                                <i class="fab fa-instagram" style="color: #e1306c;"></i>
+                                <span class="name">Instagram</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="text" class="mobile-message-input" placeholder="Mensagem">
+                    <button class="mobile-send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA 3: Informações do Cliente -->
+        <div class="mobile-screen" id="mobile-info" data-screen="info" style="display: none;">
+            <div class="mobile-info-header">
+                <button class="mobile-back-btn"><i class="fas fa-arrow-left"></i></button>
+                <span>Informações do Cliente</span>
+            </div>
+            
+            <!-- Abas -->
+            <div class="mobile-tabs">
+                <button class="mobile-tab active" data-tab="notes">Anotações</button>
+                <button class="mobile-tab" data-tab="reports">Relatórios</button>
+                <button class="mobile-tab" data-tab="history">Histórico</button>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+            <div class="mobile-tab-content">
+                <div class="mobile-tab-pane active" id="mobile-notes">
+                    <div class="mobile-info-content">
+                        <h4>Anotações do Cliente</h4>
+                        <!-- Conteúdo será populado via JavaScript -->
+                    </div>
+                </div>
+                <div class="mobile-tab-pane" id="mobile-reports">
+                    <div class="mobile-info-content">
+                        <h4>Relatórios</h4>
+                        <!-- Conteúdo será populado via JavaScript -->
+                    </div>
+                </div>
+                <div class="mobile-tab-pane" id="mobile-history">
+                    <div class="mobile-info-content">
+                        <h4>Histórico de Atendimento</h4>
+                        <!-- Conteúdo será populado via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL REMOVIDO: Conforme solicitado, removido o pop-up de Diferenciais -->
 
         <script src="script.js"></script>

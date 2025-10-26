@@ -48,7 +48,11 @@
                 status: 'online',
                 activeChannels: ['whatsapp', 'email', 'webchat'],
                 messages: [
-                    // Histórico expandido já existente no HTML
+                    { content: 'Olá! Gostaria de saber sobre os produtos de vocês', sender: 'client', time: '14:20', channel: 'whatsapp' },
+                    { content: 'Olá Maria! Claro, temos várias opções disponíveis. Qual tipo de produto você tem interesse?', sender: 'agent', time: '14:22', channel: 'whatsapp' },
+                    { content: 'Estou procurando algo sustentável para minha empresa', sender: 'client', time: '14:25', channel: 'whatsapp' },
+                    { content: 'Temos uma linha completa de produtos eco-friendly! Vou te enviar o catálogo.', sender: 'agent', time: '14:27', channel: 'whatsapp' },
+                    { content: 'Perfeito! E sobre o desconto...', sender: 'client', time: '15:50', channel: 'whatsapp' }
                 ],
                 notes: 'Cliente interessado em compra recorrente.\nPrefere contato via WhatsApp.\nEmpresa: Silva & Associados\nDecisor: Própria cliente',
                 kpis: { messages: 12, channels: 4, avgTime: '1m 30s', satisfaction: '98%', attendants: 3, transfers: 0 }
@@ -62,7 +66,11 @@
                 location: 'São Paulo, SP',
                 status: 'away',
                 activeChannels: ['email', 'webchat'],
-                messages: [],
+                messages: [
+                    { content: 'Aguardo retorno da proposta', sender: 'client', time: '14:32', channel: 'email' },
+                    { content: 'Claro! Vou enviar agora mesmo.', sender: 'agent', time: '14:35', channel: 'email' },
+                    { content: 'Perfeito, obrigado!', sender: 'client', time: '14:40', channel: 'webchat' }
+                ],
                 notes: 'Gestor de compras da empresa ABC Ltda.\nPrefere comunicação formal por e-mail.\nDecisão compartilhada com diretoria.',
                 kpis: { messages: 8, channels: 2, avgTime: '3m 15s', satisfaction: '95%', attendants: 2, transfers: 1 }
             },
@@ -75,7 +83,11 @@
                 location: 'Rio de Janeiro, RJ',
                 status: 'online',
                 activeChannels: ['webchat', 'whatsapp'],
-                messages: [],
+                messages: [
+                    { content: 'Muito obrigada pelo atendimento!', sender: 'client', time: '13:15', channel: 'webchat' },
+                    { content: 'Foi um prazer ajudar! 😊', sender: 'agent', time: '13:16', channel: 'webchat' },
+                    { content: 'Vocês são sempre muito atenciosos', sender: 'client', time: '13:18', channel: 'whatsapp' }
+                ],
                 notes: 'Cliente fidelizada há 2 anos.\nSempre muito educada e satisfeita.\nCompra mensalmente.',
                 kpis: { messages: 5, channels: 2, avgTime: '45s', satisfaction: '100%', attendants: 1, transfers: 0 }
             },
@@ -88,7 +100,11 @@
                 location: 'Fortaleza, CE',
                 status: 'offline',
                 activeChannels: ['instagram', 'whatsapp'],
-                messages: [],
+                messages: [
+                    { content: 'Quando vocês abrem amanhã?', sender: 'client', time: 'ontem', channel: 'instagram' },
+                    { content: 'Olá! Abrimos às 8h 👍', sender: 'agent', time: 'ontem', channel: 'instagram' },
+                    { content: 'Show! Obrigado', sender: 'client', time: 'ontem', channel: 'whatsapp' }
+                ],
                 notes: 'Jovem empreendedor, muito ativo no Instagram.\nPrefere linguagem mais descontraída.\nBusca soluções inovadoras.',
                 kpis: { messages: 15, channels: 3, avgTime: '2m 45s', satisfaction: '92%', attendants: 2, transfers: 0 }
             },
@@ -101,7 +117,11 @@
                 location: 'Florianópolis, SC',
                 status: 'online',
                 activeChannels: ['email', 'whatsapp'],
-                messages: [],
+                messages: [
+                    { content: 'Recebi o orçamento, muito bom!', sender: 'client', time: 'ontem', channel: 'email' },
+                    { content: 'Que bom! Tem alguma dúvida?', sender: 'agent', time: 'ontem', channel: 'email' },
+                    { content: 'Não, está tudo claro. Vamos prosseguir!', sender: 'client', time: 'ontem', channel: 'whatsapp' }
+                ],
                 notes: 'Consultora experiente.\nMuito detalhista nas especificações.\nPrecisa de documentação completa.',
                 kpis: { messages: 22, channels: 2, avgTime: '4m 12s', satisfaction: '97%', attendants: 3, transfers: 1 }
             }
@@ -612,3 +632,436 @@
                 Online (${onlineCount})
             `;
         }, 10000);
+
+        // ============================================================================
+        // NAVEGAÇÃO MOBILE - ESTILO WHATSAPP
+        // ============================================================================
+
+        let currentMobileScreen = 'conversations';
+
+        // Função para trocar entre telas mobile
+        function switchMobileScreen(screenName) {
+            // Esconder todas as telas
+            document.querySelectorAll('.mobile-screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+            
+            // Mostrar tela selecionada
+            document.getElementById(`mobile-${screenName}`).style.display = 'flex';
+            currentMobileScreen = screenName;
+        }
+
+        // Populatar lista de conversas mobile - usando os mesmos dados do desktop
+        function populateMobileConversations() {
+            const conversationsList = document.querySelector('.mobile-conversations-list');
+            
+            if (!conversationsList) {
+                // Tentar novamente após um pequeno delay
+                setTimeout(populateMobileConversations, 200);
+                return;
+            }
+            
+            conversationsList.innerHTML = ''; // Limpar lista
+            
+            // Dados das conversas do desktop
+            const desktopConversations = [
+                {
+                    id: 'maria-silva',
+                    name: 'Maria Clara Silva',
+                    avatar: 'MC',
+                    avatarColor: '#2563eb',
+                    status: 'online',
+                    channel: { icon: 'fab fa-whatsapp', color: '#25d366' },
+                    preview: 'Perfeito! E sobre o desconto...',
+                    time: '15:50',
+                    unread: 2
+                },
+                {
+                    id: 'joao-pereira',
+                    name: 'João Pereira',
+                    avatar: 'JP',
+                    avatarColor: '#16a34a',
+                    status: 'away',
+                    channel: { icon: 'fas fa-envelope', color: '#3b82f6' },
+                    preview: 'Aguardo retorno da proposta',
+                    time: '14:32',
+                    unread: 0
+                },
+                {
+                    id: 'ana-costa',
+                    name: 'Ana Costa',
+                    avatar: 'AC',
+                    avatarColor: '#dc2626',
+                    status: 'online',
+                    channel: { icon: 'fas fa-comments', color: '#7c3aed' },
+                    preview: 'Muito obrigada pelo atendimento!',
+                    time: '13:15',
+                    unread: 0
+                },
+                {
+                    id: 'pedro-lima',
+                    name: 'Pedro Lima',
+                    avatar: 'PL',
+                    avatarColor: '#ea580c',
+                    status: 'offline',
+                    channel: { icon: 'fab fa-instagram', color: '#e1306c' },
+                    preview: 'Quando vocês abrem amanhã?',
+                    time: 'ontem',
+                    unread: 1
+                },
+                {
+                    id: 'carla-mendes',
+                    name: 'Carla Mendes',
+                    avatar: 'CM',
+                    avatarColor: '#7c3aed',
+                    status: 'online',
+                    channel: { icon: 'fas fa-envelope', color: '#3b82f6' },
+                    preview: 'Recebi o orçamento, muito bom!',
+                    time: 'ontem',
+                    unread: 0
+                }
+            ];
+            
+            desktopConversations.forEach(conversation => {
+                const conversationItem = document.createElement('div');
+                conversationItem.className = 'mobile-conversation-item';
+                conversationItem.innerHTML = `
+                    <div class="mobile-conversation-avatar" style="background: ${conversation.avatarColor}">
+                        ${conversation.avatar}
+                    </div>
+                    <div class="mobile-conversation-status status-${conversation.status}"></div>
+                    <div class="mobile-conversation-info">
+                        <div class="mobile-conversation-name">${conversation.name}</div>
+                        <div class="mobile-conversation-preview">
+                            <i class="${conversation.channel.icon}" style="color: ${conversation.channel.color};"></i>
+                            <span>${conversation.preview}</span>
+                        </div>
+                    </div>
+                    <div class="mobile-conversation-meta">
+                        <div class="mobile-conversation-time">${conversation.time}</div>
+                        ${conversation.unread > 0 ? `<div class="mobile-unread-badge">${conversation.unread}</div>` : ''}
+                    </div>
+                `;
+                
+                conversationItem.addEventListener('click', () => {
+                    currentClient = conversation.id;
+                    populateMobileChat();
+                    switchMobileScreen('chat');
+                });
+                
+                conversationsList.appendChild(conversationItem);
+            });
+        }
+
+        // Popular chat mobile com mensagens do cliente atual
+        function populateMobileChat() {
+            const client = clientsData[currentClient];
+            
+            if (!client) {
+                return;
+            }
+            
+            const chatMessages = document.querySelector('.mobile-chat-messages');
+            const contactName = document.querySelector('.mobile-contact-name');
+            const contactStatus = document.querySelector('.mobile-contact-status');
+            
+            // Atualizar header do chat
+            if (contactName) contactName.textContent = client.name;
+            if (contactStatus) {
+                contactStatus.textContent = client.status === 'online' ? 'Online agora' : 
+                    client.status === 'away' ? 'Ausente' : 'Visto por último hoje';
+            }
+            
+            // Limpar mensagens antigas
+            if (chatMessages) {
+                chatMessages.innerHTML = '';
+                
+                // Mapeamento de canais para ícones
+                const channelIcons = {
+                    whatsapp: { icon: 'fab fa-whatsapp', color: '#25d366', name: 'WhatsApp' },
+                    email: { icon: 'fas fa-envelope', color: '#3b82f6', name: 'E-mail' },
+                    webchat: { icon: 'fas fa-comments', color: '#7c3aed', name: 'Chat Web' },
+                    instagram: { icon: 'fab fa-instagram', color: '#e1306c', name: 'Instagram' }
+                };
+                
+                // Adicionar mensagens com indicador de canal
+                if (client.messages && client.messages.length > 0) {
+                    client.messages.forEach(message => {
+                        const messageChannel = message.channel || 'whatsapp';
+                        const channelInfo = channelIcons[messageChannel];
+                        
+                        const messageElement = document.createElement('div');
+                        messageElement.className = `mobile-message ${message.sender === 'client' ? 'mobile-message-received' : 'mobile-message-sent'}`;
+                        messageElement.innerHTML = `
+                            <div class="mobile-message-header" data-channel="${messageChannel}">
+                                <i class="${channelInfo.icon}" style="color: ${channelInfo.color};" title="${channelInfo.name}"></i>
+                                <span class="mobile-message-channel">${channelInfo.name}</span>
+                            </div>
+                            <div class="mobile-message-content">${message.content}</div>
+                            <div class="mobile-message-time">${message.time}</div>
+                        `;
+                        chatMessages.appendChild(messageElement);
+                    });
+                }
+                
+                // Scroll para última mensagem
+                setTimeout(() => {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 100);
+            }
+        }
+
+        // Popular informações do cliente mobile
+        function populateMobileInfo() {
+            const client = clientsData[currentClient];
+            
+            // Popular aba de anotações
+            document.getElementById('mobile-notes').innerHTML = `
+                <div class="mobile-info-content">
+                    <h4>Anotações do Cliente</h4>
+                    <div class="mobile-client-basic-info">
+                        <p><strong>Nome:</strong> ${client.name}</p>
+                        <p><strong>Email:</strong> ${client.email}</p>
+                        <p><strong>Telefone:</strong> ${client.phone}</p>
+                        <p><strong>Localização:</strong> ${client.location}</p>
+                    </div>
+                    <div class="mobile-notes-section">
+                        <h5>Observações:</h5>
+                        <p>Cliente preferencial, sempre atende rapidamente. Interessado em produtos sustentáveis.</p>
+                    </div>
+                </div>
+            `;
+            
+            // Popular aba de relatórios
+            document.getElementById('mobile-reports').innerHTML = `
+                <div class="mobile-info-content">
+                    <h4>Relatórios</h4>
+                    <div class="mobile-kpis">
+                        <div class="mobile-kpi-item">
+                            <span class="mobile-kpi-value">12</span>
+                            <span class="mobile-kpi-label">Mensagens</span>
+                        </div>
+                        <div class="mobile-kpi-item">
+                            <span class="mobile-kpi-value">3</span>
+                            <span class="mobile-kpi-label">Canais</span>
+                        </div>
+                        <div class="mobile-kpi-item">
+                            <span class="mobile-kpi-value">2m</span>
+                            <span class="mobile-kpi-label">Tempo médio</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Popular aba de histórico
+            document.getElementById('mobile-history').innerHTML = `
+                <div class="mobile-info-content">
+                    <h4>Histórico de Atendimento</h4>
+                    <div class="mobile-history-list">
+                        <div class="mobile-history-item">
+                            <strong>Hoje, 14:30</strong> - Iniciou conversa via WhatsApp
+                        </div>
+                        <div class="mobile-history-item">
+                            <strong>Ontem, 16:45</strong> - Enviou email sobre produto
+                        </div>
+                        <div class="mobile-history-item">
+                            <strong>3 dias atrás</strong> - Atendimento finalizado com sucesso
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Event listeners para navegação mobile
+        let mobileNavigationInitialized = false;
+        
+        function initMobileNavigation() {
+            if (mobileNavigationInitialized) return;
+            mobileNavigationInitialized = true;
+            
+            // Botões de voltar
+            document.querySelectorAll('.mobile-back-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (currentMobileScreen === 'chat') {
+                        switchMobileScreen('conversations');
+                    } else if (currentMobileScreen === 'info') {
+                        switchMobileScreen('chat');
+                    }
+                });
+            });
+            
+            // Botão de informações
+            document.querySelector('.mobile-info-btn').addEventListener('click', () => {
+                populateMobileInfo();
+                switchMobileScreen('info');
+            });
+            
+            // Abas das informações
+            document.querySelectorAll('.mobile-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    
+                    // Remover classe active de todas as abas
+                    document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.mobile-tab-pane').forEach(p => p.classList.remove('active'));
+                    
+                    // Ativar aba clicada
+                    tab.classList.add('active');
+                    document.getElementById(`mobile-${tabName}`).classList.add('active');
+                });
+            });
+            
+            // Dropdown de canais mobile
+            let currentMobileChannel = 'whatsapp';
+            
+            // Toggle dropdown
+            document.getElementById('mobile-channel-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dropdown = document.getElementById('mobile-channel-dropdown');
+                dropdown.classList.toggle('show');
+            });
+            
+            // Fechar dropdown ao clicar fora
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('mobile-channel-dropdown');
+                if (!e.target.closest('.mobile-channel-selector')) {
+                    dropdown.classList.remove('show');
+                }
+            });
+            
+            // Selecionar canal
+            document.querySelectorAll('.mobile-channel-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const channel = option.dataset.channel;
+                    const icon = option.querySelector('i');
+                    
+                    // Atualizar botão com o ícone selecionado
+                    const channelBtn = document.querySelector('.mobile-channel-icon');
+                    channelBtn.className = `mobile-channel-icon ${icon.className}`;
+                    channelBtn.style.color = icon.style.color;
+                    
+                    // Atualizar opções ativas
+                    document.querySelectorAll('.mobile-channel-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    option.classList.add('active');
+                    
+                    // Atualizar canal atual
+                    currentMobileChannel = channel;
+                    
+                    // Fechar dropdown
+                    document.getElementById('mobile-channel-dropdown').classList.remove('show');
+                });
+            });
+            
+            // Enviar mensagem mobile
+            document.querySelector('.mobile-send-btn').addEventListener('click', () => {
+                const input = document.querySelector('.mobile-message-input');
+                const message = input.value.trim();
+                
+                if (message) {
+                    // Mapeamento de canais para ícones
+                    const channelIcons = {
+                        whatsapp: { icon: 'fab fa-whatsapp', color: '#25d366', name: 'WhatsApp' },
+                        email: { icon: 'fas fa-envelope', color: '#3b82f6', name: 'E-mail' },
+                        webchat: { icon: 'fas fa-comments', color: '#7c3aed', name: 'Chat Web' },
+                        instagram: { icon: 'fab fa-instagram', color: '#e1306c', name: 'Instagram' }
+                    };
+                    
+                    const channelInfo = channelIcons[currentMobileChannel];
+                    
+                    // Adicionar mensagem ao chat
+                    const chatMessages = document.querySelector('.mobile-chat-messages');
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'mobile-message mobile-message-sent';
+                    messageElement.innerHTML = `
+                        <div class="mobile-message-header" data-channel="${currentMobileChannel}">
+                            <i class="${channelInfo.icon}" style="color: ${channelInfo.color};" title="${channelInfo.name}"></i>
+                            <span class="mobile-message-channel">${channelInfo.name}</span>
+                        </div>
+                        <div class="mobile-message-content">${message}</div>
+                        <div class="mobile-message-time">${new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</div>
+                    `;
+                    chatMessages.appendChild(messageElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Limpar input
+                    input.value = '';
+                    
+                    // RESPOSTA AUTOMÁTICA - igual ao desktop
+                    setTimeout(() => {
+                        const client = clientsData[currentClient];
+                        if (client) {
+                            // Canal aleatório para resposta (às vezes muda de canal)
+                            const responseChannels = ['whatsapp', 'email', 'webchat', 'instagram'];
+                            const responseChannel = Math.random() > 0.7 ? 
+                                responseChannels[Math.floor(Math.random() * responseChannels.length)] : 
+                                currentMobileChannel;
+                            
+                            const responseChannelInfo = channelIcons[responseChannel];
+                            const responseText = getRandomResponseForClient(client);
+                            
+                            const responseElement = document.createElement('div');
+                            responseElement.className = 'mobile-message mobile-message-received';
+                            responseElement.innerHTML = `
+                                <div class="mobile-message-header" data-channel="${responseChannel}">
+                                    <i class="${responseChannelInfo.icon}" style="color: ${responseChannelInfo.color};" title="${responseChannelInfo.name}"></i>
+                                    <span class="mobile-message-channel">${responseChannelInfo.name}</span>
+                                </div>
+                                <div class="mobile-message-content">${responseText}</div>
+                                <div class="mobile-message-time">${new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</div>
+                            `;
+                            
+                            chatMessages.appendChild(responseElement);
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                            
+                            // Atualizar último canal do cliente
+                            currentMobileChannel = responseChannel;
+                            
+                            // Atualizar botão do canal
+                            const channelBtn = document.querySelector('.mobile-channel-icon');
+                            channelBtn.className = `mobile-channel-icon ${responseChannelInfo.icon}`;
+                            channelBtn.style.color = responseChannelInfo.color;
+                        }
+                    }, 2000); // 2 segundos de delay igual ao desktop
+                }
+            });
+            
+            // Enter para enviar mensagem
+            document.querySelector('.mobile-message-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    document.querySelector('.mobile-send-btn').click();
+                }
+            });
+            
+            // Busca de conversas mobile
+            document.querySelector('.mobile-search-bar input').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('.mobile-conversation-item').forEach(item => {
+                    const name = item.querySelector('.mobile-conversation-name').textContent.toLowerCase();
+                    item.style.display = name.includes(query) ? 'flex' : 'none';
+                });
+            });
+        }
+
+        // Inicialização mobile
+        function initMobile() {
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    populateMobileConversations();
+                    initMobileNavigation();
+                }, 500); // Delay maior para garantir que CSS foi aplicado
+            }
+        }
+        
+        // Múltiplas formas de inicializar para garantir que funcione
+        document.addEventListener('DOMContentLoaded', initMobile);
+        window.addEventListener('load', initMobile);
+        
+        // Reinicializar em resize
+        window.addEventListener('resize', initMobile);
+        
+        // Forçar inicialização se já carregou
+        if (document.readyState === 'complete') {
+            initMobile();
+        }

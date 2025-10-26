@@ -1492,3 +1492,705 @@ body {
         .card:hover, .panel:hover, .info-card:hover {
             box-shadow: var(--shadow-card);
         }
+
+/* ============================================================================
+   MOBILE RESPONSIVO - NAVEGAÇÃO ESTILO WHATSAPP
+   ============================================================================ */
+
+/* Navegação mobile - escondida por padrão */
+.mobile-navigation {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Esconder layout desktop */
+    .container {
+        display: none !important;
+    }
+    
+    /* Mostrar navegação mobile */
+    .mobile-navigation {
+        display: block !important;
+        height: 100vh;
+        background: var(--white);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        z-index: 9999;
+    }
+}
+
+
+    
+    /* ===== ESTRUTURA DAS TELAS ===== */
+    .mobile-screen {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: var(--white);
+    }
+    
+    /* ===== TELA 1: LISTA DE CONVERSAS ===== */
+    .mobile-header {
+        background: var(--primary-green);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .mobile-header h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    
+    .mobile-header-actions {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .mobile-header-actions button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    
+    .mobile-search-bar {
+        padding: 15px 20px;
+        background: var(--gray-light);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .mobile-search-bar i {
+        color: var(--text-secondary);
+    }
+    
+    .mobile-search-bar input {
+        flex: 1;
+        border: none;
+        background: var(--white);
+        padding: 10px;
+        border-radius: 20px;
+        outline: none;
+    }
+    
+    .mobile-conversations-list {
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    /* ===== TELA 2: CHAT ===== */
+    .mobile-chat-header {
+        background: var(--primary-green);
+        color: white;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .mobile-back-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    
+    .mobile-chat-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-contact-name {
+        font-weight: 600;
+        font-size: 16px;
+    }
+    
+    .mobile-contact-status {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+    
+    .mobile-info-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    
+    .mobile-chat-messages {
+        flex: 1;
+        padding: 15px;
+        padding-bottom: 80px;
+        overflow-y: auto;
+        background: #e5ddd5;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-chat-input {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px 15px;
+        background: var(--white);
+        border-top: 1px solid var(--border-light);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+    }
+    
+    .mobile-input-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .mobile-channel-icon {
+        font-size: 20px;
+        user-select: none;
+    }
+    
+    .mobile-channel-selector {
+        width: 48px;
+        height: 48px;
+        border: 2px solid white;
+        background: var(--primary-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        color: white;
+        box-shadow: 0 2px 8px rgba(46, 125, 50, 0.4);
+    }
+    
+    .mobile-channel-selector:active {
+        transform: scale(0.95);
+        box-shadow: 0 1px 4px rgba(46, 125, 50, 0.6);
+    }
+    
+    .mobile-message-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid var(--border-light);
+        border-radius: 24px;
+        outline: none;
+        font-size: 16px;
+        background: #f1f3f4;
+        resize: none;
+        min-height: 24px;
+        max-height: 120px;
+        line-height: 24px;
+        box-sizing: border-box;
+    }
+    
+    .mobile-message-input:focus {
+        border-color: var(--primary-green);
+        background: white;
+    }
+    
+    .mobile-send-btn {
+        width: 48px;
+        height: 48px;
+        background: var(--primary-green);
+        color: white;
+        border: 2px solid white;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(46, 125, 50, 0.4);
+    }
+    
+    .mobile-send-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 1px 4px rgba(46, 125, 50, 0.6);
+    }
+    
+    /* Dropdown dos canais mobile */
+    .mobile-channel-dropdown {
+        position: absolute;
+        bottom: 60px;
+        left: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+        min-width: 160px;
+        z-index: 1000;
+        display: none;
+        overflow: hidden;
+    }
+    
+    .mobile-channel-dropdown.show {
+        display: block;
+        animation: slideUp 0.2s ease;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .mobile-channel-option {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f0f0f0;
+        background: white;
+    }
+    
+    .mobile-channel-option:last-child {
+        border-bottom: none;
+    }
+    
+    .mobile-channel-option:active {
+        background: #f0f0f0;
+        transform: scale(0.98);
+    }
+    
+    .mobile-channel-option.active {
+        background: #e3f2fd;
+        border-left: 4px solid var(--primary-green);
+    }
+    
+    .mobile-channel-option i {
+        font-size: 20px;
+        margin-right: 12px;
+        width: 24px;
+        text-align: center;
+    }
+    
+    .mobile-channel-option .name {
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .mobile-channel-option.active .name {
+        font-weight: 600;
+        color: var(--primary-green);
+    }
+    
+    /* ===== TELA 3: INFORMAÇÕES ===== */
+    .mobile-info-header {
+        background: var(--primary-green);
+        color: white;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .mobile-info-header span {
+        font-weight: 600;
+        font-size: 18px;
+    }
+    
+    .mobile-tabs {
+        display: flex;
+        background: var(--white);
+        border-bottom: 1px solid var(--border-light);
+    }
+    
+    .mobile-tab {
+        flex: 1;
+        padding: 15px;
+        background: none;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-tab.active {
+        color: var(--primary-green);
+        border-bottom-color: var(--primary-green);
+    }
+    
+    .mobile-tab-content {
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .mobile-tab-pane {
+        display: none;
+        padding: 20px;
+    }
+    
+    .mobile-tab-pane.active {
+        display: block;
+    }
+    
+    .mobile-info-content h4 {
+        margin: 0 0 15px 0;
+        color: var(--text-dark);
+        font-size: 16px;
+    }
+    
+    /* ===== ELEMENTOS DINÂMICOS MOBILE ===== */
+    
+    /* Lista de conversas */
+    .mobile-conversation-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        position: relative;
+    }
+    
+    .mobile-conversation-item:hover {
+        background: #f8f9fa;
+    }
+    
+    .mobile-conversation-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        margin-right: 15px;
+        position: relative;
+    }
+    
+    .mobile-conversation-status {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid white;
+    }
+    
+    .mobile-conversation-status.status-online {
+        background: #22c55e;
+    }
+    
+    .mobile-conversation-status.status-away {
+        background: #f59e0b;
+    }
+    
+    .mobile-conversation-status.status-offline {
+        background: #6b7280;
+    }
+    
+    .mobile-conversation-info {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .mobile-conversation-name {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: var(--text-dark);
+    }
+    
+    .mobile-conversation-preview {
+        font-size: 14px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .mobile-conversation-preview i {
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+    
+    .mobile-conversation-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
+    
+    .mobile-conversation-time {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+    
+    .mobile-unread-badge {
+        background: var(--primary-green);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: bold;
+    }
+    
+    /* Mensagens do chat mobile - estilo WhatsApp */
+    .mobile-message {
+        margin-bottom: 8px;
+        max-width: 75%;
+        word-wrap: break-word;
+        display: flex;
+        flex-direction: column;
+        clear: both;
+    }
+    
+    .mobile-message-received {
+        align-self: flex-start;
+        margin-right: auto;
+        margin-left: 0;
+    }
+    
+    .mobile-message-sent {
+        align-self: flex-end;
+        margin-left: auto;
+        margin-right: 0;
+    }
+    
+    .mobile-message-header {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 6px;
+        font-size: 12px;
+        padding: 4px 8px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        width: fit-content;
+    }
+    
+    .mobile-message-header i {
+        font-size: 14px;
+        filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+    }
+    
+    .mobile-message-channel {
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    }
+    
+    .mobile-message-sent .mobile-message-header {
+        align-self: flex-end;
+        background: rgba(46, 125, 50, 0.9);
+        color: white;
+    }
+    
+    .mobile-message-received .mobile-message-header {
+        align-self: flex-start;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+    }
+    
+    /* Cores específicas por canal - bem visíveis */
+    .mobile-message-header[data-channel="whatsapp"] {
+        background: rgba(37, 211, 102, 0.9) !important;
+        border: 2px solid #25d366;
+    }
+    
+    .mobile-message-header[data-channel="email"] {
+        background: rgba(59, 130, 246, 0.9) !important;
+        border: 2px solid #3b82f6;
+    }
+    
+    .mobile-message-header[data-channel="webchat"] {
+        background: rgba(124, 58, 237, 0.9) !important;
+        border: 2px solid #7c3aed;
+    }
+    
+    .mobile-message-header[data-channel="instagram"] {
+        background: rgba(225, 48, 108, 0.9) !important;
+        border: 2px solid #e1306c;
+    }
+    
+    .mobile-message-content {
+        padding: 8px 12px;
+        border-radius: 7.5px;
+        font-size: 14px;
+        line-height: 1.4;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mobile-message-received .mobile-message-content {
+        background: white;
+        color: #303030;
+        border-bottom-left-radius: 2px;
+    }
+    
+    .mobile-message-sent .mobile-message-content {
+        background: #dcf8c6;
+        color: #303030;
+        border-bottom-right-radius: 2px;
+    }
+    
+    .mobile-message-time {
+        font-size: 11px;
+        color: rgba(0, 0, 0, 0.45);
+        margin-top: 2px;
+        text-align: right;
+        margin-right: 4px;
+    }
+    
+    .mobile-message-sent .mobile-message-time {
+        color: rgba(0, 0, 0, 0.45);
+    }
+    
+    /* Informações do cliente mobile */
+    .mobile-client-basic-info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .mobile-client-basic-info p {
+        margin: 8px 0;
+        font-size: 14px;
+    }
+    
+    .mobile-notes-section h5 {
+        margin: 20px 0 10px 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+    
+    .mobile-kpis {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+    }
+    
+    .mobile-kpi-item {
+        text-align: center;
+    }
+    
+    .mobile-kpi-value {
+        display: block;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--primary-green);
+    }
+    
+    .mobile-kpi-label {
+        font-size: 12px;
+        color: var(--text-secondary);
+    }
+    
+    .mobile-history-list {
+        margin-top: 15px;
+    }
+    
+    .mobile-history-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    /* ===== AJUSTES RESPONSIVOS DENTRO DO MOBILE ===== */
+    
+    /* Telas muito pequenas (iPhone SE, etc) */
+    @media (max-width: 375px) {
+        .mobile-channel-selector,
+        .mobile-send-btn {
+            width: 44px !important;
+            height: 44px !important;
+        }
+        
+        .mobile-channel-icon {
+            font-size: 18px !important;
+        }
+        
+        .mobile-message-input {
+            font-size: 15px !important;
+            padding: 10px 14px !important;
+        }
+        
+        .mobile-chat-input {
+            padding: 8px 12px !important;
+        }
+        
+        .mobile-input-row {
+            gap: 6px !important;
+        }
+    }
+    
+    /* Telas médias (iPhone 12, 13, etc) */
+    @media (min-width: 376px) and (max-width: 428px) {
+        .mobile-channel-selector,
+        .mobile-send-btn {
+            width: 46px !important;
+            height: 46px !important;
+        }
+        
+        .mobile-channel-icon {
+            font-size: 19px !important;
+        }
+    }
+    
+    /* Telas grandes (iPhone Plus, Android grandes) */
+    @media (min-width: 429px) {
+        .mobile-channel-selector,
+        .mobile-send-btn {
+            width: 48px !important;
+            height: 48px !important;
+        }
+        
+        .mobile-channel-icon {
+            font-size: 20px !important;
+        }
+    }
+
+
+
+
+/* Desktop: Esconder navegação mobile */
+@media (min-width: 769px) {
+    .mobile-navigation {
+        display: none !important;
+    }
+}
